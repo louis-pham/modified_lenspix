@@ -14,7 +14,7 @@ FFLAGS = -O3 -xHost -ip -fpp -error-limit 500 -DMPIPIX -DMPI -heap-arrays
 cfitsio ?= $(CFITSIO)
 
 
-F90FLAGS = $(FFLAGS) -I$(INCLUDE) -I$(healpix)/include -L$(cfitsio)/lib -L$(healpix)/lib $(LAPACKL) -lcfitsio -g
+F90FLAGS = $(FFLAGS) -I$(INCLUDE) -I$(healpix)/include -L$(cfitsio)/lib -L$(healpix)/lib $(LAPACKL) -lcfitsio
 
 OBJFILES= toms760.o inifile.o utils.o spin_alm_tools.o \
    HealpixObj.o HealpixVis.o
@@ -33,17 +33,17 @@ SimLens.o: HealpixVis.o inifile.o
 	f77 $(F90FLAGS) -c $<
 
 %.o: %.f90
-	$(F90C) $(F90FLAGS) -c $*.f90
+	$(F90C) -g $(F90FLAGS) -c $*.f90
 
 %.o: %.F90
-	$(F90C) $(F90FLAGS) -c $*.F90
+	$(F90C) -g $(F90FLAGS) -c $*.F90
 
 
 simlens: $(LENSPIX) 	
-	$(F90C) -o simlens $(LENSPIX) $(F90FLAGS) $(LINKFLAGS)
+	$(F90C) -g -o simlens $(LENSPIX) $(F90FLAGS) $(LINKFLAGS)
 
 recon: $(OBJFILES) LensReconExample.o
-	$(F90C) -o recon $(OBJFILES) LensReconExample.o $(F90FLAGS) $(LINKFLAGS)
+	$(F90C) -g -o recon $(OBJFILES) LensReconExample.o $(F90FLAGS) $(LINKFLAGS)
 
 clean:
 	rm -f *.o* *.e* *.mod *.d *.pc *.obj core* *.il

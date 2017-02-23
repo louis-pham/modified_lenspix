@@ -1,4 +1,5 @@
 # modified_lenspix
+---very much a WIP---
 
 kappa2phi.py - reads in kappa map and converts to phi map
 

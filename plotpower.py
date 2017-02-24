@@ -5,9 +5,8 @@ import healpy as hp
 #unlensed_file = "test_original_lmax6250_nside4096_interp1.5_method1_pol_1_unlensed_simulated.dat"
 #lensed_file = "test_original_lmax6250_nside4096_interp1.5_method1_pol_1.dat"
 
-unlensed_file = "test_original_lmax3000_nside4096_interp1.5_method1_pol_1_unlensed_simulated.dat"
-lensed_file = "test_original_lmax3000_nside4096_interp1.5_method1_pol_1.dat"
-
+unlensed_file = "z4.6_new_primary_lmax5120_nside4096_interp1.5_method1_pol_1_unlensed_power.dat"
+lensed_file = "z4.6_new_primary_lmax5120_nside4096_interp1.5_method1_pol_1_lensed_power.dat"
 
 ells, unlensed_cls = np.loadtxt(unlensed_file, usecols=(0,1), unpack=True)
 lensed_cls = np.loadtxt(lensed_file, usecols=(1,), unpack=True)
@@ -15,15 +14,15 @@ lensed_cls = np.loadtxt(lensed_file, usecols=(1,), unpack=True)
 theory_ells, theoretical_cls = np.loadtxt("sample_lenspotentialCls.dat", usecols=(0,1), unpack=True)
 theory_ells2, theoretical_lensed_cls = np.loadtxt("sample_lensedCls.dat", usecols=(0,1), unpack=True)
 
-print ells
-print unlensed_cls
-print lensed_cls
+#print ells
+#print unlensed_cls
+#print lensed_cls
 
 #plt.figure()
 plt.xlabel('l')
 plt.ylabel('l(l+1)*C_l / 2pi')
-plt.loglog(theory_ells, theoretical_cls, '--g', label="Theory expectation")
-plt.loglog(theory_ells2, theoretical_lensed_cls, '--m', label="Theory exp. lensed")
+#plt.loglog(theory_ells, theoretical_cls, '--g', label="Theory expectation")
+#plt.loglog(theory_ells2, theoretical_lensed_cls, '--m', label="Theory exp. lensed")
 plt.loglog(ells, unlensed_cls, ':r', label="Unlensed")
 plt.loglog(ells, lensed_cls, 'b', label="Lensed")
 legend = plt.legend(loc='lower right', shadow=True)

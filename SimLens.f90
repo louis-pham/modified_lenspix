@@ -113,8 +113,6 @@
         call HealpixAlm_nullify(phi_alm)
         call HealpixAlm_nullify(a_temp)
         call HealpixMap_nullify(unlens_m)
-        call HealpixPower_ReadFromTextFile(P,cls_file,lmax,pol=.true.,dolens = .true.)
-        !Reads in unlensed C_l text files as produced by CAMB (or CMBFAST if you aren't doing lensing)
 
         !***read in primary
         write(*,*) "reading primary..."
@@ -129,13 +127,11 @@
         write(*,*) "reading phi map..."
         call HealpixAlm_Read(phi_alm, phi_file, lmax=lmax)
         write(*,*) "phi read successful"
-        !***convert to gradient map                                                                
+        !***convert to gradient map                                                      
         call HealpixAlm2GradientMap(H, phi_alm, GradPhi,npix,'TEB')
         
-        !call HealpixAlm_Sim(A, P, rand_seed,HasPhi=.true., dopol = want_pol)
         call HealpixAlm2Power(A,P)
-        call HealpixPower_Write(P,unlensed_cls_file)
-        !call HealpixAlm2GradientMap(H,A, GradPhi,npix,'PHI')                                
+        call HealpixPower_Write(P,unlensed_cls_file)                                
         
         !***write unlensed map (as alm) to file -- won't need when supplying own primary
         !inquire(file=unlensed_map_file, exist=unlensed_map_file_exists)

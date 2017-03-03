@@ -9,13 +9,13 @@
     use AMLUtils
     implicit none
     Type(HealpixInfo)  :: H
-    Type(HealpixMap)   :: M, GradPhi
+    Type(HealpixMap)   :: M, GradPhi, unlens_m
     Type(HealpixPower) :: P
-    Type(HealpixAlm)   :: A
+    Type(HealpixAlm)   :: A, phi_alm
     integer            :: nside, lmax
     integer(I_NPIX)    :: npix
     character(LEN=1024)  :: w8name = '../Healpix_2.00/data/'
-    character(LEN=1024)  :: file_stem, cls_file, out_file_root, cls_lensed_file
+    character(LEN=1024)  :: file_stem, cls_file, out_file_root
     character(LEN=1024) :: healpixloc
     integer, parameter :: lens_interp =1, lens_exact = 2
     integer :: lens_method = lens_interp
@@ -23,14 +23,11 @@
     integer ::  interp_method,  rand_seed
     logical :: err, want_pol
     real :: interp_factor
-    integer status
-    !LP
+    integer status    
     integer npol_in
-    Type(HealpixMap) :: unlens_m
-    Type(HealpixAlm) :: phi_alm, a_temp
     character(LEN=1024) :: phi_file, primary_file, unlensed_cls_file, unlensed_map_file, lensed_cls_file, lensed_map_file
-    logical :: unlensed_map_file_exists, lensed_map_file_exists, test_unlensed_exists
-    !/LP
+    logical :: unlensed_map_file_exists
+    
 #ifdef MPIPIX
     integer i
     
@@ -111,7 +108,6 @@
         call HealpixMap_nullify(GradPhi)
         call HealpixMap_nullify(M)
         call HealpixAlm_nullify(phi_alm)
-        call HealpixAlm_nullify(a_temp)
         call HealpixMap_nullify(unlens_m)
 
         !***read in primary

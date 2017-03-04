@@ -3,21 +3,27 @@ import numpy as np
 import healpy as hp
 
 def kap2phi(writeMap=False):
-    nside = 4096
-    lmax = 5120
-    comb_kappa_file = "kappa_maps/8Gpc_n4096_nb23_nt18_kap_comb.fits"
-    phi_alm_file = "kappa_maps/comb_z_4.6_n" + str(nside) + "_lmax" + str(lmax) + "_phi_alm.fits"
-    phi_map_file = "kappa_maps/comb_z_4.6_n" + str(nside) + "_lmax" + str(lmax) + "_phi_map.fits"
-    
-    print "===============kappa2phi==============="
+    #input filenames
     field_kappa_file = "kappa_maps/8Gpc_n4096_nb23_nt18_kap_field.fits"
     halo_kappa_file = "kappa_maps/8Gpc_n4096_nb23_nt18_kap_halo.fits"
+    unlensed_primary_file = "FromNERSC/ffp10_unlensed_scl_cmb_000_alm.fits"
+    #output filenames
+    comb_kappa_file = "kappa_maps/8Gpc_n4096_nb23_nt18_kap_comb.fits"
+    phi_alm_file = "kappa_maps/comb_z_4.6_n4096_lmax5120_phi_alm.fits"
+    phi_map_file = "kappa_maps/comb_z_4.6_n4096_lmax5120_phi_map.fits"
     
+    print "===============kappa2phi==============="
     print "----Loading maps..."
     field_kappa_map = hp.read_map(field_kappa_file)
+    nside = hp.get_nside(field_kappa_map)
     halo_kappa_map = hp.read_map(halo_kappa_file) 
     print "----Done."
 
+    print "----Loading primary..."
+    unlensed_primary = hp.read_alm(unlensed_primary_file)
+    lmax = hp.Alm.getlmax(len(unlensed_primary))
+    print "----Done."
+    
     #combine
     print "----Combining maps..." #convert to alm before combining?
     kappa_map = field_kappa_map + halo_kappa_map

@@ -8,28 +8,35 @@ args = parser.parse_args()
 
 generic_params = 'generic_params.ini'
 specific_params = 'specific_params.ini'
-out_file_root = "test_file_stem"
+out_file_root = "test_cib_lens"
 
 #input filenames
-field_kappa_file = "kappa_maps/8Gpc_n4096_nb23_nt18_kap_field.fits"
-halo_kappa_file = "kappa_maps/8Gpc_n4096_nb23_nt18_kap_halo.fits"
-unlensed_primary_file = "FromNERSC/ffp10_unlensed_scl_cmb_000_alm.fits"
+field_kappa_file = "kappa_maps/8Gpc_n2048_nb23_nt18_kap_field.fits"
+halo_kappa_file = "kappa_maps/8Gpc_n2048_nb23_nt18_kap_halo.fits"
+unlensed_primary_file = "kappa_maps/cib_fullsky_ns2048_zmin0.0_zmax1.245_nu217_13579_normalized_alm.fits"
+
 #phi output filenames
-comb_kappa_file = "kappa_maps/8Gpc_n4096_nb23_nt18_kap_comb.fits"
-phi_alm_file = "kappa_maps/" + out_file_root + "_n4096_lmax5120_phi_alm.fits"
-phi_map_file = "kappa_maps/" + out_file_root + "_n4096_lmax5120_phi_map.fits"
+comb_kappa_file = "kappa_maps/8Gpc_n2048_nb23_nt18_kap_comb.fits"
+phi_alm_file = "kappa_maps/" + out_file_root + "_n2048_lmax5120_phi_alm.fits"
+phi_map_file = "kappa_maps/" + out_file_root + "_n2048_lmax5120_phi_map.fits"
 
 nside, lmax = kap2phi(field_kappa_file, halo_kappa_file, unlensed_primary_file, comb_kappa_file, phi_alm_file, writeMap=True, phi_map_file=phi_map_file)
 
 print 'Obtained parameters NSIDE:', nside, 'and LMAX:', lmax
+
+#todo: use nside and lmax from above
+#comb_kappa_file = "kappa_maps/8Gpc_" + nside + "_nb23_nt18_kap_comb.fits"
+#phi_alm_file = "kappa_maps/" + out_file_root + "_" + nside + "_lmax" + lmax + "_phi_alm.fits"
+#phi_map_file = "kappa_maps/" + out_file_root + "_" + nside + "_lmax" + lmax + "_phi_map.fits"
+
 print 'Creating params file...'
 
 if args.output_lmax:
     output_lmax = args.output_lmax
-    print 'Output lmax set to', output_lmax + '.'
+    print 'Output lmax set to', str(output_lmax) + '.'
 else:
     output_lmax = lmax
-    print 'Output lmax defaulted to input lmax', output_lmax + '.'
+    print 'Output lmax defaulted to input lmax', str(output_lmax) + '.'
 
 subprocess.call(['cp', generic_params, specific_params])
 #commas are used as delimiters for sed commands to avoid escaping (back)slashes -- this assumes there's no commas in the filenames

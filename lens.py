@@ -8,17 +8,17 @@ args = parser.parse_args()
 
 generic_params = 'generic_params.ini'
 specific_params = 'specific_params.ini'
-out_file_root = "test_cib_lens"
+out_file_root = "pycamb_cib_compare"
 
 #input filenames
-field_kappa_file = "kappa_maps/8Gpc_n2048_nb23_nt18_kap_field.fits"
-halo_kappa_file = "kappa_maps/8Gpc_n2048_nb23_nt18_kap_halo.fits"
-unlensed_primary_file = "kappa_maps/cib_fullsky_ns2048_zmin0.0_zmax1.245_nu217_13579_normalized_alm.fits"
+field_kappa_file = "/scratch2/r/rbond/phamloui/lenspix/kappa_maps/8Gpc_n2048_nb23_nt18_kap_halo.fits"
+halo_kappa_file = "/scratch2/r/rbond/phamloui/lenspix/kappa_maps/8Gpc_n2048_nb23_nt18_kap_halo.fits"
+unlensed_primary_file = "/scratch2/r/rbond/phamloui/lenspix/kappa_maps/cib_fullsky_ns2048_zmin0.0_zmax1.245_nu217_13579_normalized_alm.fits"
 
 #phi output filenames
-comb_kappa_file = "kappa_maps/8Gpc_n2048_nb23_nt18_kap_comb.fits"
-phi_alm_file = "kappa_maps/" + out_file_root + "_n2048_lmax5120_phi_alm.fits"
-phi_map_file = "kappa_maps/" + out_file_root + "_n2048_lmax5120_phi_map.fits"
+comb_kappa_file = "kappa_maps/" + out_file_root + "8Gpc_n2048_nb23_nt18_kap_comb.fits"
+phi_alm_file = "kappa_maps/" + out_file_root + "_n2048_phi_alm.fits"
+phi_map_file = "kappa_maps/" + out_file_root + "_n2048_phi_map.fits"
 
 nside, lmax = kap2phi(field_kappa_file, halo_kappa_file, unlensed_primary_file, comb_kappa_file, phi_alm_file, writeMap=True, phi_map_file=phi_map_file)
 

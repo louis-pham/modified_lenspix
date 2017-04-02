@@ -11,16 +11,17 @@ lensed_file = "z4.6_combo_k_lmax5120_nside4096_interp1.5_method1_pol_1_lensed_po
 ells, unlensed_cls = np.loadtxt(unlensed_file, usecols=(0,1), unpack=True)
 lensed_cls = np.loadtxt(lensed_file, usecols=(1,), unpack=True)
 
-theory_ells, theoretical_cls = np.loadtxt("sample_lenspotentialCls.dat", usecols=(0,1), unpack=True)
-theory_ells2, theoretical_lensed_cls = np.loadtxt("sample_lensedCls.dat", usecols=(0,1), unpack=True)
+#theory_ells, theoretical_cls = np.loadtxt("sample_lenspotentialCls.dat", usecols=(0,1), unpack=True)
+#theory_ells2, theoretical_lensed_cls = np.loadtxt("sample_lensedCls.dat", usecols=(0,1), unpack=True)
 
 #print ells
 #print unlensed_cls
 #print lensed_cls
 
 #plt.figure()
-plt.xlabel('l')
+plt.xlabel(r'$l$')
 plt.ylabel(r'$l(l+1)*C_l / 2\pi$')
+plt.title("CIB Power Spectra")
 #plt.loglog(theory_ells, theoretical_cls, '--g', label="Theory expectation")
 #plt.loglog(theory_ells2, theoretical_lensed_cls, '--m', label="Theory exp. lensed")
 plt.loglog(ells, unlensed_cls, ':r', label="Unlensed")
@@ -34,17 +35,18 @@ frame.set_facecolor('0.90')
 
 deltas_abs = lensed_cls - unlensed_cls
 deltas = deltas_abs/unlensed_cls
-deltas_theory_abs = theoretical_lensed_cls[:2750] - theoretical_cls[:2750]
-deltas_theory = deltas_theory_abs / theoretical_cls[:2750]
+#deltas_theory_abs = theoretical_lensed_cls[:2750] - theoretical_cls[:2750]
+#deltas_theory = deltas_theory_abs / theoretical_cls[:2750]
 #print deltas_abs[:200]
 #print deltas_abs[-200:]
 #print deltas[-200:]
 
 plt.figure()
-plt.xlabel('l')
+plt.title("Relative Differences")
+plt.xlabel(r'$l$')
 plt.ylabel(r'$\Delta C_l / C_l$')
 plt.plot(ells, deltas, label="Lenspix delta")
-plt.plot(theory_ells2, deltas_theory, '--r', label="Theory delta")
+#plt.plot(theory_ells2, deltas_theory, '--r', label="Theory delta")
 legend2 = plt.legend(loc="lower right", shadow=True)
 frame2 = legend2.get_frame()
 frame2.set_facecolor('0.90')

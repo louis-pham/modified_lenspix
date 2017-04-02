@@ -30,7 +30,7 @@ nside = hp.get_nside(lensed_map)
 
 ell = np.arange(len(primary_cl))
 
-#include l(l+1)/2pi factor
+#include factors
 primary_cl = ell * (ell+1) * primary_cl / (2*np.pi)
 phi_cl = (ell * (ell + 1))**2 * phi_cl / (2*np.pi)
 lensed_cl = ell * (ell + 1) * lensed_cl / (2*np.pi)

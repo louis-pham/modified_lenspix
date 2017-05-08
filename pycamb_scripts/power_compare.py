@@ -35,6 +35,26 @@ primary_cl = ell * (ell+1) * primary_cl / (2*np.pi)
 phi_cl = (ell * (ell + 1))**2 * phi_cl / (2*np.pi)
 lensed_cl = ell * (ell + 1) * lensed_cl / (2*np.pi)
 
+#set l=0,1 to 0 because reasons
+primary_cl[0] = 0
+primary_cl[1] = 0 
+phi_cl[0] = 0
+phi_cl[1] = 0
+
+#print primary_cl
+#print phi_cl
+#print lensed_cl
+
+#smooth the spectra
+primary_cl = savitzky_golay(primary_cl, 75, 3)
+phi_cl = savitzky_golay(phi_cl, 75, 3)
+lensed_cl = savitzky_golay(lensed_cl, 75, 3)
+
+#print "primary, phi, lensed:"
+#print primary_cl
+#print phi_cl
+#print lensed_cl
+
 #fill EE,BB,TE with zeroes
 TEB_cls = np.array([[primary_cl[_l], 0, 0, 0] for _l in ell])
 
@@ -42,19 +62,28 @@ lensed_theory_TEB = correlations.lensed_cls(TEB_cls, phi_cl)
 lensed_theory_T = np.array([_l[0] for _l in lensed_theory_TEB])
 hp.write_cl("lensed_theoryCls.dat", lensed_theory_T)
 
-#smooth the spectra
-primary_cl = savitzky_golay(primary_cl, 75, 3)
-lensed_cl = savitzky_golay(lensed_cl, 75, 3)
-lensed_theory_T = savitzky_golay(lensed_theory_T, 75, 3)
+#lensed_theory_T = hp.read_cl("lensed_theoryCls.dat")
+
+#print "lensed_theory_T:"
+#print lensed_theory_T
+
+#fractional differences
+lensed_vs_primary = (lensed_cl - primary_cl) / primary_cl
+camb_vs_lenspix = (lensed_cl - lensed_theory_T) / lensed_theory_T
+lenspix_vs_primary = (lensed_theory_T - primary_cl) / primary_cl
+
+#print lensed_vs_primary
+#print camb_vs_lenspix
+#print lenspix_vs_primary
 
 plt.figure()
 plt.title("Power Spectra")
 plt.xlabel(r'$l$')
 plt.ylabel(r'$l(l+1)*C_l / 2\pi$')
 
-plt.loglog(ell, primary_cl, 'r', label="Unlensed")
-plt.loglog(ell, lensed_cl, 'b', label="Lensed")
-plt.loglog(ell, lensed_theory_T, '--g', label="Lensed (CAMB)")
+plt.loglog(ell[3001:], primary_cl[3001:], 'b', label="Unlensed")
+plt.loglog(ell[3001:], lensed_cl[3001:], 'r', label="Simulation")
+plt.loglog(ell[3001:], lensed_theory_T[3001:], 'g', label="Theory")
 
 plt.grid()
 legend2 = plt.legend(loc="lower right", shadow=True)
@@ -62,17 +91,15 @@ frame2 = legend2.get_frame()
 frame2.set_facecolor('0.90')
 
 plt.figure()
-plt.title("Fractional Difference - Unlensed vs Lensed")
+plt.title("Fractional Differences")
 plt.xlabel(r"$l$")
 plt.ylabel(r'$\Delta C_l / C_l$')
-plt.plot((lensed_cl - primary_cl) / primary_cl)
+plt.plot(ell[3001:], lensed_vs_primary[3001:], 'r', label="Simulation vs Unlensed")
+#plt.plot(camb_vs_lenspix, 'b', label="Lensed (CAMB) vs Lensed (Lenspix)")
+plt.plot(ell[3001:], lenspix_vs_primary[3001:], 'g', label="Theory vs Unlensed")
+legend3 = plt.legend(loc="lower left", shadow=True)
+frame3 = legend3.get_frame()
+frame3.set_facecolor('0.90')
 plt.grid()
-
-plt.figure()
-plt.title("Fractional Difference - Lensed (pyCAMB) vs Lensed (Lenspix)")
-plt.xlabel(r"$l$")
-plt.ylabel(r'$\Delta C_l / C_l$')
-plt.plot((lensed_cl - lensed_theory_T) / lensed_theory_T)
-plt.grid()
-
+#apr3_fractional_overlay.pdf
 plt.show()

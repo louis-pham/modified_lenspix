@@ -5,8 +5,8 @@ import healpy as hp
 #unlensed_file = "test_original_lmax6250_nside4096_interp1.5_method1_pol_1_unlensed_simulated.dat"
 #lensed_file = "test_original_lmax6250_nside4096_interp1.5_method1_pol_1.dat"
 
-unlensed_file = "z4.6_combo_k_lmax5120_nside4096_interp1.5_method1_pol_1_unlensed_power.dat"
-lensed_file = "z4.6_combo_k_lmax5120_nside4096_interp1.5_method1_pol_1_lensed_power.dat"
+unlensed_file = "pycamb_cib_compare_lmax5120_nside2048_interp1.5_method1_pol_1_unlensed_power.dat"
+lensed_file = "pycamb_cib_compare_lmax5120_nside2048_interp1.5_method1_pol_1_lensed_power.dat"
 
 ells, unlensed_cls = np.loadtxt(unlensed_file, usecols=(0,1), unpack=True)
 lensed_cls = np.loadtxt(lensed_file, usecols=(1,), unpack=True)
@@ -24,7 +24,7 @@ plt.ylabel(r'$l(l+1)*C_l / 2\pi$')
 plt.title("CIB Power Spectra")
 #plt.loglog(theory_ells, theoretical_cls, '--g', label="Theory expectation")
 #plt.loglog(theory_ells2, theoretical_lensed_cls, '--m', label="Theory exp. lensed")
-plt.loglog(ells, unlensed_cls, ':r', label="Unlensed")
+plt.loglog(ells, unlensed_cls, 'r', label="Unlensed", linewidth=1.0)
 plt.loglog(ells, lensed_cls, 'b', label="Lensed")
 legend = plt.legend(loc='lower right', shadow=True)
 frame = legend.get_frame()
@@ -46,7 +46,7 @@ plt.title("Relative Differences")
 plt.xlabel(r'$l$')
 plt.ylabel(r'$\Delta C_l / C_l$')
 plt.plot(ells, deltas, label="Lenspix delta")
-#plt.plot(theory_ells2, deltas_theory, '--r', label="Theory delta")
+#plt.plot(theory_ells2, deltas_theory, '--r', linewidth=3.0, label="Theory delta")
 legend2 = plt.legend(loc="lower right", shadow=True)
 frame2 = legend2.get_frame()
 frame2.set_facecolor('0.90')

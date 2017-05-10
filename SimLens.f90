@@ -60,6 +60,8 @@
     primary_file = Ini_Read_String('primary_file')
     !***read phi filename
     phi_file = Ini_Read_String('phi_file')
+    !***read output lensed file name
+    lensed_map_file = Ini_Read_String('lensed_file')
 
     w8name = Ini_Read_String('w8dir')
     interp_factor=0
@@ -92,9 +94,8 @@
         call HealpixInit(H,nside, lmax,.true., w8dir=w8name,method=mpi_division_method) 
     end if 
 
-    !***file names to save maps/powerspectra to
-    unlensed_map_file = trim(file_stem)//"_unlensed.fits"
-    lensed_map_file = trim(file_stem)//"_lensed.fits"
+    !***file names to save powerspectra to
+    !unlensed_map_file = trim(file_stem)//"_unlensed.fits"
     unlensed_cls_file = trim(file_stem)//"_unlensed_power.dat"
     lensed_cls_file = trim(file_stem)//"_lensed_power.dat"
 

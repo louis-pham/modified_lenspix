@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import healpy as hp
 
-def kap2phi(field_kappa_file, halo_kappa_file, unlensed_primary_file, comb_kappa_file, phi_alm_file, writeMap=True, phi_map_file=None):
+def kap2phi(field_kappa_file, halo_kappa_file, unlensed_primary_file, phi_alm_file, writeMap=False, phi_map_file=None):
     print "===============kappa2phi==============="
     print "----Loading maps..."
     field_kappa_map = hp.read_map(field_kappa_file)
@@ -19,9 +19,9 @@ def kap2phi(field_kappa_file, halo_kappa_file, unlensed_primary_file, comb_kappa
     print "----Combining maps..." #convert to alm before combining?
     kappa_map = field_kappa_map + halo_kappa_map
     print "----Done."
-    print "----Writing new combined map to file..."
-    hp.write_map(comb_kappa_file, kappa_map)
-    print "----Done."
+    #print "----Writing new combined map to file..."
+    #hp.write_map(comb_kappa_file, kappa_map)
+    #print "----Done."
     
     #no field kappa right now, so just override
     #kappa_map = halo_kappa_map
@@ -44,14 +44,14 @@ def kap2phi(field_kappa_file, halo_kappa_file, unlensed_primary_file, comb_kappa
     print "----Converting phi to map..."
     phi_map = hp.alm2map(phi_lm, nside, lmax=lmax)
     print "----Done."
-    
+
     if writeMap and phi_map_file:
         print "----Writing phi map to file..."
         hp.write_map(phi_map_file, phi_map)
         print "----Done."
 
     print "=============kappa2phi end============="
-    return (nside, lmax)
+    return lmax
 
 if __name__ == "__main__":
     #todo: file selection

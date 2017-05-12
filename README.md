@@ -10,13 +10,14 @@ Simlens.f90 - modified to read in external unlensed map and a phi map
 
 params.ini - nside/lmax should match the nside/lmax of the input primary and phi map
 
+## What does it do?
+  Running lens.py will take the kappa (convergence) map and convert it to phi (gravitational potential). It will then read the nside and lmax of the primary map to be used in the lensing step. The script will then generate a "specific_params.ini" (created from the "generic_params.ini") based on the inputs provided. Lensing is simulated, and the result is with the provided filename. This will also yield an unlensed and lensed power spectrum.
+
 ## Usage
 ### Required files:
-1. Unlensed TQU alm
-2. Kappa alms (one halo and one field alm)
+1. Unlensed TQU alm/map FITS file
+2. Kappa map (combination of halo and field)
 
-In __lens.py__, set the input and output filenames, the output file root, and desired parameter filenames, then run it. The user can also run the script with the '-ol' flag and provide a different lmax for the lensed map (not yet reflected in output).
+Run __python lens.py <kappa_map_in> <primary_in> <phi_alm_out> <lensed_map_out>__, where __<kappa_map_in>__ is the filename of the kappa map you want to lens with, __<primary_in>__ is the filename of the primary you want lensed, __<phi_alm_out>__ is the filename of the outputted phi alm, and __<lensed_map_out>__ is the filename for the lensed result.
 
-## What does it do?
-  Running the lens.py script will take the kappa maps and convert them to phi maps. It will then read the nside and lmax of the primary CMB map to be used in the lensing step. The script will then generate a "specific_params.ini" (created from the "generic_params.ini") that contains the filenames and other parameters for lensing. 
-  Lensing is executed and saved in files with the _output_file_root_ specified in the script.
+Also, in pycamb_scripts there is the __power_compare.py__ script that allows one to compare the simulated lensed result with the theoretical lensed calculations based on CAMB. __** This is not functioning properly yet **__

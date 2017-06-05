@@ -5,38 +5,43 @@ import healpy as hp
 
 nside = 2048
 
-kappa_map_file = "kappa_maps/8Gpc_n2048_nb23_nt18_kap_halo.fits"
-phi_alm_file = "may9_test_output_phi.fits"
-unlensed_file = "kappa_maps/cib_fullsky_ns2048_zmin0.0_zmax1.245_nu217_13579_normalized_alm.fits" #alm
-lensed_file = "may9_test_output_lensed.fits" #map
-
+kappa_map_file = "/scratch2/r/rbond/phamloui/lenspix_files/kappa_maps/all_z_kappa_with_halofit.fits"
+phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/jun1_all_z_phi_with_halofit.fits"
+unlensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/ffp10_unlensed_scl_cmb_000_alm.fits" #alm
+lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/jun1_all_z_halofit_julian_cmb_lensed.fits" #map
+#kappa_map_file2 = "/scratch2/r/rbond/phamloui/lenspix_files/output/rotated_maps/8Gpc_n2048_nb23_nt18_kap_comb.fits"
 kappa_map = hp.read_map(kappa_map_file)
+#kappa_map2 = hp.read_map(kappa_map_file2)
 phi_alm = hp.read_alm(phi_alm_file)
 phi_map = hp.alm2map(phi_alm, nside)
+#phi_map = hp.read_map("/scratch2/r/rbond/phamloui/lenspix_files/output/vanilla_lmax3000_nside2048_interp1.5_method1_pol_1_phi.fits")
 
 lensed_map, lensed_header = hp.read_map(lensed_file, h=True)
 unlensed_alm = hp.read_alm(unlensed_file)
-unlensed_map = hp.alm2map(unlensed_alm, nside)
+unlensed_map = hp.alm2map(unlensed_alm.astype('D'), nside)
 #unlensed_map = hp.read_map(unlensed_file)
 
 diff_map = lensed_map - unlensed_map
 
-print diff_map
+#print diff_map
 
-temp_bound = np.maximum(np.absolute(lensed_map).max(), np.absolute(unlensed_map).max())
-diff_bound = max(np.absolute(diff_map))
+temp_max = np.maximum(lensed_map.max(), unlensed_map.max())
+temp_min = np.minimum(lensed_map.min(), unlensed_map.min())
+diff_bound = np.absolute(diff_map.max())
 
 hot_cmap = cm.get_cmap("hot")
 hot_cmap.set_under("w")
+
 seismic_cmap = cm.get_cmap("seismic")
 seismic_cmap.set_under("w")
 
 #hp.cartview(kappa_map, title="Kappa", xsize=2048, cmap=hot_cmap, lonra=[-10,10], latra=[-10,10])
 #hp.cartview(phi_map, title="Phi", xsize=2048, cmap=hot_cmap, lonra=[-10,10], latra=[-10,10])
 hp.mollview(kappa_map, title="Kappa", xsize=2048, cmap=hot_cmap)
+#hp.mollview(kappa_map2, title="Kappa 2", xsize=2048, cmap=hot_cmap)
 hp.mollview(phi_map, title="Phi", xsize=2048, cmap=hot_cmap)
-hp.mollview(unlensed_map, title="Unlensed", xsize=2048, cmap=hot_cmap, min=-temp_bound, max=temp_bound, unit="muK")
-hp.mollview(lensed_map, title="Lensed", xsize=2048, cmap=hot_cmap, min=-temp_bound, max=temp_bound, unit="muK")
+hp.mollview(unlensed_map, title="Unlensed", xsize=2048, cmap=hot_cmap, min=temp_min, max=temp_max, unit="muK")
+hp.mollview(lensed_map, title="Lensed", xsize=2048, cmap=hot_cmap, min=temp_min, max=temp_max, unit="muK")
 hp.mollview(diff_map, title="Diff map", xsize=2048, cmap=seismic_cmap, min=-diff_bound, max=diff_bound, unit="muK") 
 #hp.cartview(unlensed_map, title="Unlensed", xsize=2048, cmap=hot_cmap, min=-temp_bound, max=temp_bound, unit="muK", lonra=[-10,10], latra=[-10,10])
 #hp.cartview(lensed_map, title="Lensed", xsize=2048, cmap=hot_cmap, min=-temp_bound, max=temp_bound, unit="muK", lonra=[-10,10], latra=[-10,10])

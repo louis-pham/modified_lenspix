@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import healpy as hp
 
-def kap2phi(field_kappa, halo_kappa, unlensed_primary, phi_alm_file, writeMap=False, phi_map_file=None):
+def kap2phi(field_kappa, halo_kappa, unlensed_primary, phi_alm_file, writeMap=False, phi_map_file=None, lens_lmax=None):
     print "===============kappa2phi==============="
     #field_kappa = hp.read_map(field_kappa_file)
     nside = hp.get_nside(field_kappa)    
@@ -11,6 +11,9 @@ def kap2phi(field_kappa, halo_kappa, unlensed_primary, phi_alm_file, writeMap=Fa
     #print "Loading primary..."
     #unlensed_primary = hp.read_alm(unlensed_primary_file)
     lmax = hp.Alm.getlmax(len(unlensed_primary))
+    if not lens_lmax:
+        lens_lmax = lmax
+    print "LMAX:", lmax
     #print "----Done loading maps."
 
     #combine
@@ -26,12 +29,12 @@ def kap2phi(field_kappa, halo_kappa, unlensed_primary, phi_alm_file, writeMap=Fa
     
     #convert to alm
     print "----Converting kappa map to alm..."
-    kappa_lm = hp.map2alm(kappa_map, lmax=lmax)
+    kappa_lm = hp.map2alm(kappa_map, lmax=lens_lmax)
     print "----Done."
     
     #convert to phi (grav potential)
     print "----Converting kappa to phi..."
-    l,m = hp.Alm.getlm(lmax)
+    l,m = hp.Alm.getlm(lens_lmax)
     phi_lm = kappa_lm * (2.0 / (l*(l+1.0)))
     phi_lm[l==0] = 0
 

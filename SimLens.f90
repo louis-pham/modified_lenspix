@@ -1,5 +1,6 @@
     !Simple program demonstrating how to generate a simulated lensed map
     !AL, Feb 2004; Updated Oct 2007
+    !LP, AST425 2016/2017 + SURP 2017
     program SimLensCMB
     use HealpixObj
     use HealpixVis

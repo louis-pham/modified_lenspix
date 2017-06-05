@@ -57,7 +57,7 @@ theory_CL_TT = np.insert(theory_CL_TT, 0, 0)
 theory_CL_TT = theory_CL_TT / 1e12
 #print theory_CL_TT
 #print theory_CL_TT.shape
-lmax = hp.Alm.getlmax(len(primary_alm)) if hp.Alm.getlmax(len(primary_alm)) < len(theory_TT_ell)-1 else len(theory_TT_ell)-1
+lmax = hp.Alm.getlmax(len(primary_alm)) if hp.Alm.getlmax(len(primary_alm)) < len(theory_TT_ell)-1 else len(theory_TT_ell)-1 #change this later
 #print lmax
 theory_TT_ell = theory_TT_ell[0:lmax+1]
 theory_CL_TT = theory_CL_TT[0:lmax+1]

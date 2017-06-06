@@ -43,8 +43,25 @@ kappa_theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/all_z_kappa_wit
 primary_theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/cls/ffp10_scalCls.dat"
 lensed_theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/jun1_full_z_halofit_theory_lensed.dat"
 lens_lmax = 4000
-kappa_map_file = "/scratch2/r/rbond/phamloui/lenspix_files/kappa_maps/all_z_kappa_with_halofit.fits"
+#kappa_map_file = "/scratch2/r/rbond/phamloui/lenspix_files/kappa_maps/all_z_kappa_with_halofit.fits"
 
+#interp_factor = 2
+#primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/ffp10_unlensed_scl_cmb_000_alm.fits"
+#phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/jun1_all_z_phi_with_halofit.fits/"
+#lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/jun6_camb_all_z_julian_cmb_lensed_interp_factor_2.fits"
+#kappa_theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/all_z_kappa_with_halofit.dat"
+#primary_theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/cls/ffp10_scalCls.dat"
+#lensed_theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/jun1_full_z_halofit_theory_lensed.dat"
+#lens_lmax = 4000
+
+#interp_factor = 3
+#primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/ffp10_unlensed_scl_cmb_000_alm.fits"
+#phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/jun1_all_z_phi_with_halofit.fits/"
+#lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/jun6_camb_all_z_julian_cmb_lensed_interp_factor_3.fits"
+#kappa_theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/all_z_kappa_with_halofit.dat"
+#primary_theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/cls/ffp10_scalCls.dat"
+#lensed_theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/jun1_full_z_halofit_theory_lensed.dat"
+#lens_lmax = 4000
 
 print "Loading primary sim and theory..."
 primary_alm = hp.read_alm(primary_file)
@@ -70,7 +87,7 @@ theory_CL_TT = theory_CL_TT[0:lmax+1]
 #theory_CL_KK_interp = interpolate.splev(theory_KK_ell_interp, kappa_interp_func, der=0)
 #theory_CL_KK_interp = np.pad(theory_CL_KK_interp, (0, lmax-lens_lmax), 'constant', constant_values=(0,0)) #camb convolution needs equal lmax, so just pad with zeros
 #theory_KK_ell_interp = np.arange(0, lmax+1)
-#not actually kappa, values are stored as C_phi
+##not actually kappa, values are stored as C_phi
 #CMB_outputscale = 7.4311e12
 ##theory_KK_ell_interp = np.insert(theory_KK_ell, (0,0), (0,1)) #missing ell=0,1, add zeros
 ##theory_CL_KK_interp = np.insert(theory_CL_KK, (0,0), (0,0))
@@ -78,8 +95,8 @@ theory_CL_TT = theory_CL_TT[0:lmax+1]
 #theory_CL_KK_interp = theory_CL_KK_interp * (theory_KK_ell_interp*(theory_KK_ell_interp+1)/2.0)**2 #now its actually kappa
 #theory_CL_KK_interp[0] = 0
 #theory_CL_KK_interp[1] = 0
-#theory_KK_ell = theory_KK_ell_interp[0:lens_lmax+1]
-#theory_CL_KK = theory_CL_KK_interp[0:lens_lmax+1]
+#theory_KK_ell = theory_KK_ell_interp[0:lmax+1]
+#theory_CL_KK = theory_CL_KK_interp[0:lmax+1]
 
 # get "theoretical" CL_KK by smoothing power spectrum from map
 #print "Loading kappa map..."
@@ -121,7 +138,7 @@ simulation_CL_TT_lensed = simulation_TT_ell * (simulation_TT_ell + 1) * simulati
 #smooth the spectra
 #primary_cl = savitzky_golay(primary_cl, 75, 3)
 #phi_cl = savitzky_golay(phi_cl, 75, 3)
-#simulation_CL_TT_lensed = savitzky_golay(simulation_CL_TT_lensed, 75, 3)
+simulation_CL_TT_lensed = savitzky_golay(simulation_CL_TT_lensed, 75, 3)
 
 #print theory_TT_ell
 #print theory_CL_TT.shape
@@ -174,6 +191,7 @@ plt.subplot(212)
 plt.title("Theory vs Sim - Differences of Fractional Differences", fontsize=18)
 plt.xlabel(r"$l$", fontsize=30)
 plt.ylabel(r'$\Delta C_l / C_l$', fontsize=30)
+plt.ylim([-0.1,0.1])
 plt.plot(theory_TT_ell[1:], lenspix_vs_primary[1:]-camb_vs_primary[1:], 'r', label="Simulation vs Theory")
 plt.grid()
 

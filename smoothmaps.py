@@ -9,17 +9,13 @@ def gaussFunc(ell, ell_o):
 def appendToFilename(filename, newStr):
     return "{0}_{2}.{1}".format(*filename.rsplit('.', 1) + [newStr])
 
-#original cib comparison                                                                                                                   
-#primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/primary_maps/cib_fullsky_ns2048_zmin0.0_zmax1.245_nu217_13579_normalized_alm.fits"
-
-primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/ffp10_unlensed_scl_cmb_000_alm.fits"
+#primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/ffp10_unlensed_scl_cmb_000_alm.fits"
 kappa_map_file = "/scratch2/r/rbond/phamloui/lenspix_files/kappa_maps/8Gpc_n2048_nb23_nt18_kap_comb.fits"
-
-#primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/primary_maps/cib_fullsky_ns2048_zmin0.0_zmax1.245_nu217_13579_normalized_alm.fits"
+primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/primary_maps/cib_fullsky_ns2048_zmin0.0_zmax1.245_nu217_13579_normalized_alm.fits"
 #kappa_map_file = "/scratch2/r/rbond/phamloui/lenspix_files/kappa_maps/8Gpc_n2048_nb23_nt18_kap_comb.fits"
 
 
-l_o = 5000.
+l_o = 4000.
 
 primary_smooth_file = appendToFilename(primary_file, "gauss_smoothed_ell_o_%.0f" % (l_o))
 kappa_smooth_file = appendToFilename(kappa_map_file, "gauss_smoothed_ell_o_%.0f" % (l_o))
@@ -85,5 +81,5 @@ plt.show()
 
 print "writing smoothed primary to file..."
 hp.write_alm(primary_smooth_file, primary_smooth)
-#print "writing smoothed kappa to file..."
-#hp.write_map(kappa_smooth_file, kappa_smooth_map)
+print "writing smoothed kappa to file..."
+hp.write_map(kappa_smooth_file, kappa_smooth_map)

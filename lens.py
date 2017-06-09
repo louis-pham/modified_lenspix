@@ -89,7 +89,7 @@ else:
     print "Loading primary..."
     unlensedPrimary = hp.read_alm(unlensedPrimaryFile)
 #get lmax and create phi alm
-lmax = kap2phi(fieldKappa, haloKappa, unlensedPrimary, phiAlmFile, lens_lmax=4000)
+lmax = kap2phi(fieldKappa, haloKappa, unlensedPrimary, phiAlmFile)
 #lmax = kap2phi(fieldKappaFile, haloKappaFile, unlensedPrimaryFile, phiAlmFile)
 print 'Obtained parameters NSIDE:', nside, 'and LMAX:', lmax
 

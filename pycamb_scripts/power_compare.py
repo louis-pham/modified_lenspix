@@ -58,11 +58,11 @@ graphTitleRoot = ""
 #graphTitleRoot = "Julian CMB + LPT2 Run"
 
 #smooth test cib #2
-#primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/primary_maps/cib_fullsky_ns2048_zmin0.0_zmax1.245_nu217_13579_normalized_alm_gauss_smoothed_ell_o_3000.fits"
-#phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/may26_test_smooth_n2048_phi_alm_ell_o_3000.fits"
-#lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/may26_test_smooth_ell_o_3000_cib_fullsky_ns2048_lensed.fits"
-#theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/may26_lensed_theoryCls_smooth_ell_o_3000.dat"
-#graphTitleRoot = "Smoothed CIB 2"
+primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/primary_maps/cib_fullsky_ns2048_zmin0.0_zmax1.245_nu217_13579_normalized_alm_gauss_smoothed_ell_o_4000.fits"
+phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/jun7_test_smooth_n2048_phi_alm_ell_o_4000.fits"
+lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/jun7_test_smooth_ell_o_4000_cib_fullsky_ns2048_lensed.fits"
+theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/jun7_lensed_theoryCls_smooth_ell_o_4000.dat"
+graphTitleRoot = "Smoothed CIB ell_o=4000"
 
 #smooth test cib #3
 #primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/primary_maps/cib_fullsky_ns2048_zmin0.0_zmax1.245_nu217_13579_normalized_alm_gauss_smoothed_ell_o_5000.fits"
@@ -84,18 +84,19 @@ graphTitleRoot = ""
 #theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/may29_lensed_theoryCls_only_kappa_smooth_ell_o_5000.dat"
 
 #sim vs theory:
-primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/ffp10_alm_from_scalCls.fits"
-phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/may29_n2048_phi_restricted_alm.fits"
-lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/may29_kappa_restricted_ffp10_scalCls_lensed.fits"
-kappa_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/cl_kappa_restricted.txt"
-primary_theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/cls/ffp10_scalCls.dat"
+#primary_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/ffp10_alm_from_scalCls.fits"
+#phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/may29_n2048_phi_restricted_alm.fits"
+#lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/may29_kappa_restricted_ffp10_scalCls_lensed.fits"
+#kappa_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/cl_kappa_restricted.txt"
+#primary_theory_cl_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/cls/ffp10_scalCls.dat"
 
 print "Loading primary..."
 primary_alm = hp.read_alm(primary_file)
-primary_theory_ell, primary_theory_cl = np.loadtxt(primary_theory_cl_file, usecols(0,1), unpack=True)
+#primary_theory_ell, primary_theory_cl = np.loadtxt(primary_theory_cl_file, usecols=(0,1), unpack=True)
 lmax = hp.Alm.getlmax(len(primary_alm))
 #kappa_halo_map = hp.read_map(kappa_halo_file)
 #kappa_field_map = hp.read_map(kappa_field_file)
+primary_cl = hp.alm2cl(primary_alm)
 
 print "Loading phi..."
 phi_alm = hp.read_alm(phi_alm_file)
@@ -137,15 +138,14 @@ lensed_cl = savitzky_golay(lensed_cl, 75, 3)
 #print lensed_cl
 
 #fill EE,BB,TE with zeroes
-TEB_cls = np.array([[primary_cl[_l], 0, 0, 0] for _l in ell])
-
-lensed_theory_TEB = correlations.lensed_cls(TEB_cls, phi_cl)
-lensed_theory_T = np.array([_l[0] for _l in lensed_theory_TEB])
+#TEB_cls = np.array([[primary_cl[_l], 0, 0, 0] for _l in ell])
+#lensed_theory_TEB = correlations.lensed_cls(TEB_cls, phi_cl)
+#lensed_theory_T = np.array([_l[0] for _l in lensed_theory_TEB])
 #print "writing camb cl..."
 #hp.write_cl(theory_cl_file, lensed_theory_T)
 
-#print "Loading camb cl"
-#lensed_theory_T = hp.read_cl(theory_cl_file)
+print "Loading camb cl"
+lensed_theory_T = hp.read_cl(theory_cl_file)
 
 #print "lensed_theory_T:"
 #print lensed_theory_T

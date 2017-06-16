@@ -12,7 +12,7 @@ dz=0.2
 i=0
 
 # if you've run the script before, set this to True to avoid doing summation again
-mapsSaved = False
+mapsSaved = True
 
 myCmap = cm.get_cmap("hot")
 myCmap.set_under("w")
@@ -33,7 +33,7 @@ customCDict = {'red': ((0.0, 0.0, 0.0),
                         (1.0, 1.0, 1.0))
                }
 
-customCmap = colors.LinearSegmentedColormap('hot2', customCDict, N=500, gamma=1.0)
+customCmap = colors.LinearSegmentedColormap('hot2', customCDict, N=750, gamma=1.0)
 
 # zMin = i*dz
 # zMax = (i+1)*dz
@@ -93,7 +93,7 @@ while i<n and not mapsSaved:
 
 # get colorbar ranges
 maxTemp = max(plotArray[0][1].max(),plotArray[1][1].max(),plotArray[2][1].max(),plotArray[3][1].max(),unlenPlotArray[0][1].max(),unlenPlotArray[1][1].max(),unlenPlotArray[2][1].max(),unlenPlotArray[3][1].max())
-minTemp = min(plotArray[0][1].min(),plotArray[1][1].min(),plotArray[2][1].min(),plotArray[3][1].min(),unlenPlotArray[0][1].min(),unlenPlotArray[1][1].min(),unlenPlotArray[2][1].min(),unlenPlotArray[3][1].min())]
+minTemp = min(plotArray[0][1].min(),plotArray[1][1].min(),plotArray[2][1].min(),plotArray[3][1].min(),unlenPlotArray[0][1].min(),unlenPlotArray[1][1].min(),unlenPlotArray[2][1].min(),unlenPlotArray[3][1].min())
 #print maxTemp
 #print minTemp
 
@@ -104,33 +104,58 @@ normScheme = colors.SymLogNorm(linthresh=1e-20, linscale=0.03, vmin=-anotherMax,
 for i in np.arange(3,4):
     z = plotArray[i][0]
     lenmap = plotArray[i][1]
+    # print lenmap
     unlenmap = unlenPlotArray[i][1]
     diffMap = lenmap - unlenmap
     diffRange = np.absolute(diffMap).max()
     diffScheme = colors.SymLogNorm(linthresh=1e-20, linscale=0.03, vmin=-diffRange, vmax=diffRange)
-    hp.mollview(lenmap, xsize=2048, title="Lensed summed to zmax=%.2f" % (z), cmap=myCmap, min=minTemp, max=maxTemp, norm=normScheme, unit=tUnit)
-    hp.mollview(unlenmap, xsize=2048, title="Unlensed summed to zmax=%.2f" % (z), cmap=myCmap, min=minTemp, max=maxTemp, norm=normScheme, unit=tUnit)
-    hp.mollview(diffMap, xsize=2048, title="Diff of summed to zmax=%.2f"%(z), cmap=seismic_cmap, min=-diffRange, max=diffRange, norm=normScheme, unit=tUnit)
+    # hp.mollview(lenmap, xsize=2048, title="Lensed summed to zmax=%.2f" % (z), cmap=myCmap, min=minTemp, max=maxTemp, norm=normScheme, unit=tUnit)
+    # hp.mollview(unlenmap, xsize=2048, title="Unlensed summed to zmax=%.2f" % (z), cmap=myCmap, min=minTemp, max=maxTemp, norm=normScheme, unit=tUnit)
+    # hp.mollview(diffMap, xsize=2048, title="Diff of summed to zmax=%.2f"%(z), cmap=seismic_cmap, min=-diffRange, max=diffRange, norm=normScheme, unit=tUnit)
+
+# plot lensed map as if it were single redshift
+summedLensedMap = hp.read_map("/scratch2/r/rbond/phamloui/lenspix_files/output/jun14_cib_test_summed_slice_lensed.fits")
+# hp.mollview(summedLensedMap, xsize=2048, title="Lensed single redhsift zmax=4.60", cmap=myCmap, min=minTemp, max=maxTemp, norm=normScheme, unit=tUnit)
+# print summedLensedMap
+summedLensedMap = np.nan_to_num(summedLensedMap)
+summedLensedCls = hp.anafast(summedLensedMap)
+# print summedLensedCls
+summedLensedElls = np.arange(summedLensedCls.shape[0])
+summedLensedCls = summedLensedElls * (summedLensedElls + 1) * summedLensedCls / (2*np.pi)
+#plt.show()
+
+plt.figure()
+plt.title("CIB Power Spectra")
+plt.xlabel(r"$l$")
+plt.ylabel(r"$l(l+1)C_l/2\pi$")
+colours = ['#EA638C','#4B3F72','#441151','#1F2041']
+plt.xlabel(r'$l$')
+plt.ylabel(r"$l(l+1)C_l/2\pi$")
+
+print "getting power spectra of slices"
+for i in np.arange(3,4):
+    print "i:",i
+    z = plotArray[i][0]
+    curmap = plotArray[i][1]
+    curmapunl = unlenPlotArray[i][1]
+    curcl = hp.anafast(curmap)
+    # print curcl
+    ell = np.arange(curcl.shape[0])
+    curcl = ell * (ell+1) * curcl / (2 * np.pi)
+    plt.loglog(ell, curcl, c=colours[i], label="zmax %.2f" % (z))
+    if i == 3:
+        finalCl = curcl
+plt.loglog(summedLensedElls, summedLensedCls, c="#F9564F", label="zmax 4.60 single redshift")
+
+legend = plt.legend(loc="lower right", shadow=True)
+frame = legend.get_frame()
+frame.set_facecolor('0.90')
+
+finalDiff = (finalCl - summedLensedCls) / summedLensedCls
+plt.figure()
+plt.title("Power Spectra Difference at zmax=4.60")
+plt.xlabel(r"$l$")
+plt.ylabel(r"$\Delta C_l/C_l$")
+plt.plot(summedLensedElls, finalDiff, lw="1", c="#a6cee3", ls="-")
+
 plt.show()
-
-# plt.figure()
-# plt.title("CIB Power Spectra")
-# plt.xlabel(r"$l$")
-# plt.ylabel(r"$l(l+1)C_l/2\pi$")
-# colours = ['r','b','m','k']
-# plt.xlabel(r'$C_l$')
-# plt.ylabel('Count')
-
-# for i in np.arange(3,4):
-    # z = plotArray[i][0]
-    # curmap = plotArray[i][1]
-    # curmapunl = unlenPlotArray[i][1]
-    # curcl = hp.anafast(curmap)
-    # ell = np.arange(curcl.shape[0])
-    # curcl = ell * (ell+1) * curcl / (2 * np.pi)
-    # plt.loglog(ell, curcl, colours[i], label="zmax %.2f" % (z))
-    
-# legend = plt.legend(loc="lower right", shadow=True)
-# frame = legend.get_frame()
-# frame.set_facecolor('0.90')
-# plt.show()

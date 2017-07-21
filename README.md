@@ -12,16 +12,15 @@ Much, if not all of the following assumes being used in a SciNet environment.
 1. Unlensed TQU alm/map FITS file
 2. Kappa map (combination of halo and field)
 
-Run "__python lens.py <kappa_map_in> <primary_in> <phi_alm_out> <lensed_map_out> -np <no. of processes>__", where __<kappa_map_in>__ is the filename of the kappa map you want to lens with, __<primary_in>__ is the filename of the primary alm you want lensed, __<phi_alm_out>__ is the filename of the outputted phi alm, and __<lensed_map_out>__ is the filename for the lensed result. __<no. of processes>__ is the same as the __mpirun -np__ argument, since the code simply calls this command at the end, as a result one does not need to call this script with mpirun, but it must done in a job environment. If -np is not provided it will default to 1. 
+Run "__python lens.py <kappa_map_in> <primary_in> <phi_alm_out> <lensed_map_out> -np <no. of processes>__", where __<kappa_map_in>__ is the filename of the kappa map you want to lens with, __<primary_in>__ is the filename of the primary alm you want lensed, __<phi_alm_out>__ is the filename of the outputted phi alm, and __<lensed_map_out>__ is the filename for the lensed result. __<no. of processes>__ is the same as the __mpirun -np__ argument, since the code simply calls this command at the end. If -np is not provided it will default to 1. 
 
-An additional __make_maps.sh__ script has been added for lensing of multiple maps, which we used for CIB lensing simulations. If using this, make sure the __-np__ arguments agrees with the script's arguments (the comments at the beginning of the file). 
+An additional __make_maps.sh__ script has been added for batch lensing of multiple maps, which we used for CIB lensing simulations. If using this, make sure the __-np__ arguments agrees with the script's arguments (the comments at the beginning of the file). 
 
 ## Helper scripts
 There are several helper scripts included. The main ones would be:
 * kappa2phi.py
-* theory_sim_compare.py (in pycamb_scripts folder)
+* analytic_sim_compare.py (in pycamb_scripts folder)
 * makekappa.py
-* makegif.py
 * makegif.py
 * plotgrad.py
 * shell_z_integrand.py
@@ -29,7 +28,7 @@ There are several helper scripts included. The main ones would be:
 
 __kappa2phi.py__ is the script that does the conversion of the kappa map to phi alm.
 
-__theory_sim_compare.py__ is a script that allows one to compare the simulated lensed result with the theoretical lensed calculations based on CAMB. To use, provide the following in the script:
+__analytic_sim_compare.py__ is a script that allows one to compare the simulated lensed result with the analytical lensed calculations based on CAMB. To use, provide the following in the script:
 * primary alm filename
 * phi alm filename
 * lensed map filename
@@ -38,9 +37,9 @@ It will also need the theoretical power spectrum of the same maps used in Lenspi
 * kappa power spectrum
 * primary power spectrum
 
-Finally, give a filename for the output from CAMB's convolution (the theoretical lensed power spectrum). 
+Finally, give a filename for the output from CAMB's convolution (the analytical lensed power spectrum). 
 
-__makekappa.py__ was used in conjunction with theory_sim_compare.py to take the correct power spectrum data from scalCls.dat or lenspotentialCls.dat and combine them with our own simulated kappa maps.
+__makekappa.py__ was used in conjunction with analytic_sim_compare.py to take the correct power spectrum data from scalCls.dat or lenspotentialCls.dat and combine them with our own simulated kappa maps.
 
 __makegif.py__ will take a set of CIB plots and combine them into a single animation.
 

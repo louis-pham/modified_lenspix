@@ -4,6 +4,7 @@ import healpy as hp
 from astropy.io import fits
 import subprocess
 import argparse
+import os.path
 
 def checkFitsType(fileName):
     '''
@@ -58,17 +59,20 @@ unlensedPrimaryFile = args.input_primary
 #phiMapFile = outFileRoot + "_n2048_phi_map.fits"                                 
 phiAlmFile = args.output_phi
 lensedFile = args.output_lensed
+gradPhiFile = appendToFilename(phiAlmFile, 'grad')
 
 #get nside
 hdulist = fits.open(fieldKappaFile)
 nside = hdulist[1].header['NSIDE']
 hdulist.close()
 
-print "Creating zero map..."
 zeroMapFile = "/scratch2/r/rbond/phamloui/lenspix_files/zeros_%s.fits" % (nside)
-zeroMap = np.zeros(12 * (nside**2)) #create a zero map and use that in place of halo kappa, since we only have field kappa now
-hp.write_map(zeroMapFile, zeroMap)
 haloKappaFile = zeroMapFile
+
+if not os.path.exists(zeroMapFile):
+    print "Creating zero map..."
+    zeroMap = np.zeros(12 * (nside**2)) #create a zero map and use that in place of halo kappa, since we only have field kappa now
+    hp.write_map(zeroMapFile, zeroMap)
 
 #load maps
 print "Loading maps..."
@@ -81,16 +85,28 @@ haloKappa = hp.read_map(haloKappaFile)
 if primaryType != 'alm':
     print "Primary is map - converting to alm..."
     unlensedPrimaryMap = hp.read_map(unlensedPrimaryFile)
-    unlensedPrimary = hp.map2alm(unlensedPrimaryMap)
+    print "get filename"
     unlensedPrimaryFile = appendToFilename(unlensedPrimaryFile, "alm")
+    print unlensedPrimaryFile
+    print "convert"
+    unlensedPrimary = hp.map2alm(unlensedPrimaryMap)
+    print "write"
     hp.write_alm(unlensedPrimaryFile, unlensedPrimary)
     print "Saved new primary alm to", unlensedPrimaryFile
 else:
     print "Loading primary..."
     unlensedPrimary = hp.read_alm(unlensedPrimaryFile)
 #get lmax and create phi alm
-lmax = kap2phi(fieldKappa, haloKappa, unlensedPrimary, phiAlmFile)
-#lmax = kap2phi(fieldKappaFile, haloKappaFile, unlensedPrimaryFile, phiAlmFile)
+
+if not os.path.exists(phiAlmFile):
+    print "phi doesn't exist"
+    lmax = kap2phi(fieldKappa, haloKappa, unlensedPrimary, phiAlmFile)
+    #lmax = kap2phi(fieldKappaFile, haloKappaFile, unlensedPrimaryFile, phiAlmFile)
+else:
+    print "phi exists"
+    phiAlm = hp.read_alm(phiAlmFile)
+    lmax = hp.Alm.getlmax(phiAlm.shape[0])
+
 print 'Obtained parameters NSIDE:', nside, 'and LMAX:', lmax
 
 print 'Creating params file...'
@@ -109,6 +125,7 @@ subprocess.call(['sed', '-i', 's,__OUTFILEROOTREPLACE__,' + outFileRoot + ',g', 
 subprocess.call(['sed', '-i', 's,__OUTPUTLMAXREPLACE__,' + str(outputLmax) + ',g', specificParams])
 subprocess.call(['sed', '-i', 's,__PRIMARYFILEREPLACE__,' + unlensedPrimaryFile + ',g', specificParams])
 subprocess.call(['sed', '-i', 's,__PHIFILEREPLACE__,' + phiAlmFile + ',g', specificParams])
+subprocess.call(['sed', '-i', 's,__GRADPHIFILEREPLACE__,' + gradPhiFile + ',g', specificParams])
 subprocess.call(['sed', '-i', 's,__LENSEDFILEREPLACE__,' + lensedFile + ',g', specificParams])
 print 'Params file created.'
 

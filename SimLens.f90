@@ -26,7 +26,7 @@
     real :: interp_factor
     integer status    
     integer npol_in
-    character(LEN=1024) :: phi_file, primary_file, unlensed_cls_file, unlensed_map_file, lensed_cls_file, lensed_map_file
+    character(LEN=1024) :: phi_file, gradphi_file, primary_file, unlensed_cls_file, unlensed_map_file, lensed_cls_file, lensed_map_file
     logical :: unlensed_map_file_exists
     
 #ifdef MPIPIX
@@ -61,6 +61,7 @@
     primary_file = Ini_Read_String('primary_file')
     !***read phi filename
     phi_file = Ini_Read_String('phi_file')
+    gradphi_file = Ini_Read_String('gradphi_file')
     !***read output lensed file name
     lensed_map_file = Ini_Read_String('lensed_file')
 
@@ -127,7 +128,7 @@
         write(*,*) "phi read successful"
         !***convert to gradient map                                                      
         call HealpixAlm2GradientMap(H, phi_alm, GradPhi,npix,'TEB')
-        
+        call HealpixMap_write(GradPhi, gradphi_file, overwrite=.true., spin_map=.true.)
         call HealpixAlm2Power(A,P)
         call HealpixPower_Write(P,unlensed_cls_file)                                
         

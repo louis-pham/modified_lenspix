@@ -5,10 +5,18 @@ import healpy as hp
 
 nside = 2048
 
-kappa_map_file = "/scratch2/r/rbond/phamloui/lenspix_files/lensing/kappa_z4pt6_z0.0_z0.2_nside2048_hp.fits"
-phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/jun7_cib_test_first_slice_phi.fits"
-unlensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib/cib_fullsky_ns2048_zmin0.00_zmax0.20_nu217_tot.fits" #alm
-lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/output/jun7_cib_test_first_slice_lensed.fits" #map
+#george old maps
+# kappa_map_file = "/scratch2/r/rbond/phamloui/lenspix_files/lensing/kappa_z4pt6_z0.0_z2_nside2048_hp.fits"
+# phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/lensing/phi_z4pt6_z0.0_z2_nside2048_hp.fits"
+# unlensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib/cib_fullsky_ns2048_zmin2.00_zmax2.20_nu217_tot_alm.fits" #alm
+# lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib/lensed_cib_fullsky_ns2048_zmin2.00_zmax2.20_nu217_tot.fits" #map
+
+#new george maps
+kappa_map_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_kappa/8Gpc_n2048_nb18_nt16_kap_sis_2_ns2048_zmin0.0_zmax0.2_hp.fits"
+phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_kappa/8Gpc_n2048_nb18_nt16_phi_sis_2_ns2048_zmin0.0_zmax0.2_hp.fits"
+unlensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_unlensed/cib_fullsky_ns2048_zmin0.20_zmax0.40f_nu217_ns2048_tot_alm.fits" #alm
+lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_lensed/lensed_cib_fullsky_ns2048_zmin0.20_zmax0.40f_nu217_ns2048_tot.fits" #map
+
 #kappa_map_file2 = "/scratch2/r/rbond/phamloui/lenspix_files/output/rotated_maps/8Gpc_n2048_nb23_nt18_kap_comb.fits"
 kappa_map = hp.read_map(kappa_map_file)
 #kappa_map2 = hp.read_map(kappa_map_file2)
@@ -17,11 +25,12 @@ phi_map = hp.alm2map(phi_alm, nside)
 #phi_map = hp.read_map("/scratch2/r/rbond/phamloui/lenspix_files/output/vanilla_lmax3000_nside2048_interp1.5_method1_pol_1_phi.fits")
 
 lensed_map, lensed_header = hp.read_map(lensed_file, h=True)
+print "nans:", lensed_map[np.isnan(lensed_map)].shape[0]
 lensed_map = np.nan_to_num(lensed_map)
-#unlensed_alm = hp.read_alm(unlensed_file)
-#unlensed_map = hp.alm2map(unlensed_alm.astype('D'), nside)
-unlensed_map = hp.read_map(unlensed_file)
-unlensed_alm = hp.map2alm(unlensed_map)
+unlensed_alm = hp.read_alm(unlensed_file)
+unlensed_map = hp.alm2map(unlensed_alm.astype('D'), nside)
+# unlensed_map = hp.read_map(unlensed_file)
+# unlensed_alm = hp.map2alm(unlensed_map)
 
 diff_map = lensed_map - unlensed_map
 

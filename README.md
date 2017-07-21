@@ -3,7 +3,7 @@
 original code found at: http://cosmologist.info/lenspix/
 
 ## What does it do?
-  Running lens.py will take the kappa (convergence) map and convert it to phi (gravitational potential) to be used as a lensing map. It will then read the nside and lmax of the primary map to be used in the lensing step - you can also provide a different lmax for the lensing map. The script will then generate a "specific_params.ini" (created from the "generic_params.ini") based on the inputs provided. Lensing is simulated, and the lensed map is written to the provided filename. This will also yield an unlensed and lensed power spectrum.
+  Running lens.py will take the kappa (convergence) map and convert it to phi (gravitational potential) to be used as a lensing map. It will then read the nside and lmax of the primary map to be used in the lensing step. The script will then generate a "specific_params.ini" (created from the "generic_params.ini") based on the inputs provided. Lensing is simulated, and the lensed map is written to the provided filename. This will also yield a gradient phi map, and an unlensed and lensed power spectrum.
 
 ## Usage
 ### Required files:
@@ -17,6 +17,11 @@ There are several helper scripts included. The main ones would be:
 * kappa2phi.py
 * theory_sim_compare.py (in pycamb_scripts folder)
 * makekappa.py
+* makegif.py
+* makegif.py
+* plotgrad.py
+* shell_z_integrand.py
+* shellcls.py
 
 __kappa2phi.py__ is the script that does the conversion of the kappa map to phi alm.
 
@@ -32,3 +37,17 @@ It will also need the theoretical power spectrum of the same maps used in Lenspi
 Finally, give a filename for the output from CAMB's convolution (the theoretical lensed power spectrum). 
 
 __makekappa.py__ was used in conjunction with theory_sim_compare.py to take the correct power spectrum data from scalCls.dat or lenspotentialCls.dat and combine them with our own simulated kappa maps.
+
+__makegif.py__ will take a set of CIB plots and combine them into a single animation.
+
+__plotgrad.py__ will create a plot of the phi map with the gradients overplotted.
+
+__shell_z_integrand.py__ takes the cl value of each CIB shell at l=500 and plots them.
+
+__shellcls.py__ will plot the power spectra of the shells in one plot.
+
+## Known issues
+* lensing a map with many point sources will yield NaNs
+
+## Todos
+* different output lmax not yet implemented

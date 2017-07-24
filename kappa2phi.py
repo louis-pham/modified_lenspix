@@ -4,12 +4,7 @@ import healpy as hp
 
 def kap2phi(field_kappa, halo_kappa, unlensed_primary, phi_alm_file, writeMap=False, phi_map_file=None, lens_lmax=None):
     print "===============kappa2phi==============="
-    #field_kappa = hp.read_map(field_kappa_file)
     nside = hp.get_nside(field_kappa)    
-    #print "Loading halo kappa..."
-    #halo_kappa = hp.read_map(halo_kappa_file) 
-    #print "Loading primary..."
-    #unlensed_primary = hp.read_alm(unlensed_primary_file)
     lmax = hp.Alm.getlmax(len(unlensed_primary))
     if not lens_lmax:
         lens_lmax = lmax
@@ -20,12 +15,6 @@ def kap2phi(field_kappa, halo_kappa, unlensed_primary, phi_alm_file, writeMap=Fa
     print "----Combining field and halo kappa..."
     kappa_map = field_kappa + halo_kappa
     print "----Done combining."
-    #print "----Writing new combined map to file..."
-    #hp.write_map(comb_kappa_file, kappa_map)
-    #print "----Done."
-
-    #no field kappa right now, so just override
-    #kappa_map = halo_kappa
     
     #convert to alm
     print "----Converting kappa map to alm..."
@@ -39,8 +28,6 @@ def kap2phi(field_kappa, halo_kappa, unlensed_primary, phi_alm_file, writeMap=Fa
     phi_lm[l==0] = 0
 
     print "----Writing phi alm to file..."
-    #print phi_alm_file
-    #print phi_lm
     hp.write_alm(phi_alm_file, phi_lm)
     print "----Done."
 

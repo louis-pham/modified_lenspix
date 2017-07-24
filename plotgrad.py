@@ -11,12 +11,6 @@ mollProj = hp.projector.MollweideProj()
 x,y = mollProj.ang2xy(theta, phi)
 theta = 90 - np.degrees(theta) #lat
 phi = np.degrees(phi) #lon
-# xDiff = x[1] - x[0]
-# yDiff = y[4] - y[3]
-# printx [:100] / xDiff
-# print xDiff
-# print y[:100] / yDiff
-# print yDiff
 
 seismic_cmap = cm.get_cmap('seismic')
 seismic_cmap.set_under('w')

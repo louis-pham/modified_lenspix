@@ -26,8 +26,7 @@
     real :: interp_factor
     integer status    
     integer npol_in
-    character(LEN=1024) :: phi_file, gradphi_file, primary_file, unlensed_cls_file, unlensed_map_file, lensed_cls_file, lensed_map_file
-    logical :: unlensed_map_file_exists
+    character(LEN=1024) :: phi_file, gradphi_file, primary_file, unlensed_cls_file, lensed_cls_file, lensed_map_file
     
 #ifdef MPIPIX
     integer i
@@ -57,12 +56,12 @@
 
     Ini_Fail_On_Not_Found = .false.
 
-    !***read primary filename
+    !read primary filename
     primary_file = Ini_Read_String('primary_file')
-    !***read phi filename
+    !read phi filename
     phi_file = Ini_Read_String('phi_file')
     gradphi_file = Ini_Read_String('gradphi_file')
-    !***read output lensed file name
+    !read output lensed file name
     lensed_map_file = Ini_Read_String('lensed_file')
 
     w8name = Ini_Read_String('w8dir')
@@ -96,8 +95,7 @@
         call HealpixInit(H,nside, lmax,.true., w8dir=w8name,method=mpi_division_method) 
     end if 
 
-    !***file names to save powerspectra to
-    !unlensed_map_file = trim(file_stem)//"_unlensed.fits"
+    !file names to save powerspectra to
     unlensed_cls_file = trim(file_stem)//"_unlensed_power.dat"
     lensed_cls_file = trim(file_stem)//"_lensed_power.dat"
 
@@ -113,35 +111,22 @@
         call HealpixAlm_nullify(phi_alm)
         call HealpixMap_nullify(unlens_m)
 
-        !***read in primary
+        !read in primary
         write(*,*) "reading primary..."
-        !call HealpixMap_Read(M, "test_primary.fits"
-        !call HealpixMap2Alm(H, M, A, lmax, dopol = want_pol) 
         call HealpixAlm_Read(A, primary_file, lmax=lmax, npol_in=npol_in)
-        !write(*,*) "npol: ", A%npol
         write(*,*) "primary read successful"
         call HealpixAlm2Map(H, A, M, npix)
         
-        !***read in phi map (alm)
+        !read in phi map (alm)
         write(*,*) "reading phi map..."
         call HealpixAlm_Read(phi_alm, phi_file, lmax=lmax)
         write(*,*) "phi read successful"
-        !***convert to gradient map                                                      
+        !convert to gradient map                                                      
         call HealpixAlm2GradientMap(H, phi_alm, GradPhi,npix,'TEB')
         call HealpixMap_write(GradPhi, gradphi_file, overwrite=.true., spin_map=.true.)
         call HealpixAlm2Power(A,P)
         call HealpixPower_Write(P,unlensed_cls_file)                                
         
-        !***write unlensed map (as alm) to file -- won't need when supplying own primary
-        !inquire(file=unlensed_map_file, exist=unlensed_map_file_exists)
-        !if (unlensed_map_file_exists) call DeleteFile(unlensed_map_file)
-        !call HealpixAlm_Write(A, unlensed_map_file)
-        
-        !***TEST - output unlensed as map instead of alm
-        !NOTE -- can be saved, but causes lensing part to error
-        !call HealpixAlm2Map(H, A, unlens_m, npix)
-        !call HealpixMap_Write(unlens_m, unlensed_map_file, overwrite=.true.)
-
         if (lens_method == lens_exact) then
             call HealpixExactLensedMap_GradPhi(H,A,GradPhi,M) !(H,A,GradPhi,M)
         else if (lens_method == lens_interp) then

@@ -46,17 +46,11 @@ else:
     numProc = '1'
 
 #input filenames
-#fieldKappaFile = "/scratch2/r/rbond/phamloui/lenspix/kappa_maps/8Gpc_n2048_nb23_nt18_kap_halo.fits"
-#haloKappaFile = "/scratch2/r/rbond/phamloui/lenspix/kappa_maps/8Gpc_n2048_nb23_nt18_kap_halo.fits"
-#nlensedPrimaryFile = "/scratch2/r/rbond/phamloui/lenspix/kappa_maps/cib_fullsky_ns2048_zmin0.0_zmax1.245_nu217_13579_normalized_alm.fits"
 fieldKappaFile = args.input_field_kappa
 #haloKappaFile = args.input_halo_kappa
 unlensedPrimaryFile = args.input_primary
 
 #output filenames                                                                                    
-#combKappaFile = outFileRoot + "8Gpc_n2048_nb23_nt18_kap_comb.fits"             
-#phiAlmFile = outFileRoot + "_n2048_phi_alm.fits"                                
-#phiMapFile = outFileRoot + "_n2048_phi_map.fits"                                 
 phiAlmFile = args.output_phi
 lensedFile = args.output_lensed
 gradPhiFile = appendToFilename(phiAlmFile, 'grad')
@@ -66,6 +60,7 @@ hdulist = fits.open(fieldKappaFile)
 nside = hdulist[1].header['NSIDE']
 hdulist.close()
 
+#no halo map yet, use zero map for now
 zeroMapFile = "/scratch2/r/rbond/phamloui/lenspix_files/zeros_%s.fits" % (nside)
 haloKappaFile = zeroMapFile
 
@@ -96,16 +91,19 @@ if primaryType != 'alm':
 else:
     print "Loading primary..."
     unlensedPrimary = hp.read_alm(unlensedPrimaryFile)
-#get lmax and create phi alm
+unlenLmax = hp.Alm.getlmax(unlensedPrimary.shape[0])
 
+#get lmax and create phi alm
 if not os.path.exists(phiAlmFile):
     print "phi doesn't exist"
-    lmax = kap2phi(fieldKappa, haloKappa, unlensedPrimary, phiAlmFile)
+    phiLmax = kap2phi(fieldKappa, haloKappa, unlensedPrimary, phiAlmFile)
     #lmax = kap2phi(fieldKappaFile, haloKappaFile, unlensedPrimaryFile, phiAlmFile)
 else:
     print "phi exists"
     phiAlm = hp.read_alm(phiAlmFile)
-    lmax = hp.Alm.getlmax(phiAlm.shape[0])
+    phiLmax = hp.Alm.getlmax(phiAlm.shape[0])
+
+lmax = max(unlenLmax, phiLmax)
 
 print 'Obtained parameters NSIDE:', nside, 'and LMAX:', lmax
 

@@ -1,3 +1,4 @@
+# calculate CAMB's analytical lensed power spctrum and compare to our simulations
 import matplotlib.pyplot as plt
 import numpy as np
 import healpy as hp
@@ -31,6 +32,7 @@ print "Loading primary sim and theory..."
 primary_alm = hp.read_alm(primary_file)
 theory_TT_ell, theory_CL_TT, theory_CL_EE, theory_CL_TE = np.loadtxt(primary_theory_cl_file, usecols=(0,1,2,3), unpack=True) # l(l+1)/2 factor included
 
+#fill in mono/dipole
 theory_TT_ell = np.insert(theory_TT_ell, 0, 1)
 theory_TT_ell = np.insert(theory_TT_ell, 0, 0)
 theory_CL_TT = np.insert(theory_CL_TT, 0, 0); theory_CL_TT = np.insert(theory_CL_TT, 0, 0)
@@ -132,7 +134,7 @@ hp.write_cl(lensed_theory_cl_file % ('TT'), theory_CL_TT_lensed)
 hp.write_cl(lensed_theory_cl_file % ('EE'), theory_CL_EE_lensed)
 hp.write_cl(lensed_theory_cl_file % ('BB'), theory_CL_BB_lensed)
 
-# print "reading theory cl..."
+# print "reading theory cl..." #if you've already done calculation before and don't want to wait
 # theory_CL_TT_lensed = hp.read_cl(lensed_theory_cl_file % ('TT'))
 # theory_CL_EE_lensed = hp.read_cl(lensed_theory_cl_file % ('EE'))
 # theory_CL_BB_lensed = hp.read_cl(lensed_theory_cl_file % ('BB'))

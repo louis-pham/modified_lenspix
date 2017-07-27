@@ -1,3 +1,4 @@
+# combine marcelo's z<4.5 map with GRF from CAMB for remaining 4.5<z<1100
 import numpy as np
 import healpy as hp
 from scipy import interpolate
@@ -7,7 +8,7 @@ lmax=4000
 nside=2048
 CMB_outputscale = 7.4311e12 #straight outta CAMB (default value)
 
-# z<1100
+# load CAMB z<1100
 #camb_ell, camb_C_phi = np.loadtxt("/scratch2/r/rbond/engelen/lenspower/CAMB/peakpatch_lenspotenticalCls.dat", usecols=(0,5), unpack=True)
 camb_ell, camb_C_phi = np.loadtxt("/scratch2/r/rbond/engelen/lenspower/CAMB/peakpatch_nonlinear0_scalCls.dat", usecols=(0,4), unpack=True)
 camb_ell = np.insert(camb_ell, (0,0), (0,1)) #missing ell=0,1, add zeros
@@ -20,7 +21,7 @@ camb_CL_kappa[0] = 0
 camb_CL_kappa[1] = 0
 #print "linear camb kappa:", camb_CL_kappa[0:5]
 
-# z<1100 + halofit
+# load CAMB z<1100 + halofit
 camb_ell_nonlin, camb_C_phi_nonlin = np.loadtxt("/scratch2/r/rbond/engelen/lenspower/CAMB/peakpatch_nonlinear3_scalCls.dat", usecols=(0,4), unpack=True)
 camb_ell_nonlin = np.insert(camb_ell_nonlin, (0,0), (0,1)) #missing ell=0,1, add zeros
 camb_C_phi_nonlin = np.insert(camb_C_phi_nonlin, (0,0), (0,0))
@@ -37,7 +38,7 @@ camb_CL_kappa_nonlin[1] = 0
 #hp.write_map("/scratch2/r/rbond/phamloui/lenspix_files/kappa_maps/all_z_kappa_with_halofit.fits", camb_CL_kappa_nonlin_map)
 #hp.write_cl("/scratch2/r/rbond/phamloui/lenspix_files/all_z_kappa_with_halofit.dat", camb_CL_kappa_nonlin[0:lmax+1])
 
-# z<4.5
+# load camb z<4.5
 alex_ell_raw, alex_CL_kappa_raw = np.loadtxt("/scratch2/r/rbond/engelen/peakpatch/data/cl_kappa_restricted_nonlinear0.txt", usecols=(0,1), unpack=True)
 alex_interp_func = interpolate.splrep(alex_ell_raw, alex_CL_kappa_raw, s=0)
 alex_ell_interp = np.arange(0,lmax+1)
@@ -47,7 +48,7 @@ alex_CL_kappa_interp[1] = 0
 alex_CL_phi_interp = alex_CL_kappa_interp / (alex_ell_interp * (alex_ell_interp+1) / 2.0)**2
 #print "linear alex kappa:", alex_CL_kappa_interp[0:5]
 
-# z<4.5 + halofit
+# load camb z<4.5 + halofit
 alex_ell_raw_nonlin, alex_CL_kappa_raw_nonlin = np.loadtxt("/scratch2/r/rbond/engelen/peakpatch/data/cl_kappa_restricted_nonlinear3.txt", usecols=(0,1), unpack=True)
 alex_interp_func_nonlin = interpolate.splrep(alex_ell_raw_nonlin, alex_CL_kappa_raw_nonlin, s=0)
 alex_ell_interp_nonlin = np.arange(0,lmax+1)
@@ -57,7 +58,7 @@ alex_CL_kappa_interp_nonlin[1] = 0
 alex_CL_phi_interp_nonlin = alex_CL_kappa_interp_nonlin / (alex_ell_interp_nonlin * (alex_ell_interp_nonlin+1) / 2.0)**2
 #print "nonlinear alex kappa: ", alex_CL_kappa_interp_nonlin[0:5]
 
-# z<4.5 peakpatch
+# load peakpatch z<4.5
 marcelo_kappa_map = hp.read_map("/scratch2/r/rbond/malvarez/peakpatch/lightcones/octant/8Gpc_n4096_nb18_nt16/kappa/8Gpc_n4096_nb18_nt16_kap_fph.fits")
 marcelo_CL_kappa = hp.anafast(marcelo_kappa_map, lmax=lmax)
 

@@ -1,3 +1,4 @@
+# plots gradphi over phi 
 import numpy as np
 import healpy as hp
 import matplotlib.pyplot as plt
@@ -25,6 +26,8 @@ lensed = hp.read_map("/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_lensed/len
 # gradIndices = np.random.choice(nside**2*12, nside**2*12/40000, replace=False)
 # gradIndices = pixels[((phi<=90) | (phi>=270)) & (np.absolute(theta)<=45)]
 # gradIndices = np.random.choice(gradIndices, gradIndices.shape[0]/400, replace=False)
+
+# get nan coordinates and overplot there
 lensedUnseen = np.copy(lensed)
 lensedNanToZero = np.copy(lensed)
 nanPos = np.isnan(lensed)

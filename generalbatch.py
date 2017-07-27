@@ -1,3 +1,4 @@
+# file for looping over CIB maps - mainly used for debugging and plotting
 import numpy as np
 import healpy as hp
 import matplotlib.pyplot as plt
@@ -11,7 +12,7 @@ import imageio
 def appendToFilename(filename, newStr):
     return "{0}_{2}.{1}".format(*filename.rsplit('.', 1) + [newStr])
 
-def diagnoseMap(_map, s=''):
+def printNanAmount(_map, s=''):
     if s:
         s = ' (%s)' % s
     print "num of nans%s:" % s, _map[np.isnan(_map)].shape[0]
@@ -26,43 +27,34 @@ i=1
 nside = 2048
 zeroMap = np.zeros(12 * (nside**2))
 
+# manually load colormaps from later version of numpy
 plt.register_cmap(name='viridis', cmap=cmaps.viridis)
 plt.register_cmap(name='magma', cmap=cmaps.magma)
 plt.register_cmap(name='inferno', cmap=cmaps.inferno)
 plt.register_cmap(name='plasma', cmap=cmaps.plasma)
-
 hotCmap = cm.get_cmap('hot')
 hotCmap.set_under('w')
-
 viridisCmap = cm.get_cmap('viridis')
 viridisCmap.set_under('w')
-
 magmaCmap = cm.get_cmap('magma')
 magmaCmap.set_under('w')
-
 seismicCmap = cm.get_cmap('seismic')
 seismicCmap.set_under('w')
-
-bwrCmap = cm.get_cmap('bwr')
-bwrCmap.set_under('w')
-
-rdbuCmap = cm.get_cmap('RdBu')
-rdbuCmap.set_under('w')
 
 cibCmap = viridisCmap
 lensingCmap = hotCmap
 diffCmap = seismicCmap
 
-_fwhm = 0.0001
-rotAngle = (2.356, 0.812, 0.)
+_fwhm = 0.0001 #how much to smooth by
+rotAngle = (2.356, 0.812, 0.) #change map centre
 _range = [-10.,10.]
 
+# took min and max of all maps and saved them in these vars
 # diffAbsMax = 5.98130261969e-21
-cibAbsMin = 4.54899993655e-24
-cibAbsMax = 5.22722053948e-20
-# unlensedPrimary = hp.read_alm("/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_unlensed/cib_fullsky_ns2048_zmin0.20_zmax0.40_nu217_ns2048_tot_alm.fits")
-# curSummedKappa = np.copy(zeroMap)
+# cibAbsMin = 4.54899993655e-24
+# cibAbsMax = 5.22722053948e-20
 
+# curSummedKappa = np.copy(zeroMap) # used for map summing
 while i<n:
     print "i:", i
     # if i%3 != 0 and i != 1:
@@ -94,7 +86,7 @@ while i<n:
     # # for primary map -> alm
     print "read unlensed"
     unlensedMap = hp.read_map(mapFilename)
-    # diagnoseMap(unlensedMap, 'unlensed')
+    # printNanAmount(unlensedMap, 'unlensed')
     # # unlensedMapRaw = np.copy(unlensedMap)
     # if os.path.exists(unlensedSmoothedFilename):
     #     unlensedMap = hp.read_map(unlensedSmoothedFilename)
@@ -105,34 +97,12 @@ while i<n:
     # hp.write_alm(almFilename, unlensedAlm)
 
     # unlensedAlm = hp.read_alm(appendToFilename(appendToFilename(mapFilename, 'd_1e3'), 'alm'))
-    # diagnoseMap(unlensedAlm, 'unlensed alm d1e3')
-
-    # multiply by 1e18
-    # unlensedMap = hp.read_map(mapFilename) * 1.0e2 
-    # print "map2alm"
-    # unlensedAlm = hp.map2alm(unlensedMap)
-    # print "writing alm and map 1e18"
-    # hp.write_alm(appendToFilename(mapFilename, '1e2_alm'), unlensedAlm)
-    # hp.write_map(appendToFilename(mapFilename, "1e2"), unlensedMap)
-    # # same thing for kappa
-    # if zMax%1 == 0: #phi files have weird formatting     
-    #     kappaMapFilename = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_kappa/8Gpc_n2048_nb18_nt16_kap_sis_2_ns2048_zmin0.0_zmax%d_hp.fits" % (int(zMax))
-    # else:
-    #     kappaMapFilename = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_kappa/8Gpc_n2048_nb18_nt16_kap_sis_2_ns2048_zmin0.0_zmax%.1f_hp.fits" % (zMax)
-    # curkapmap = hp.read_map(kappaMapFilename) * 1.0e18
-    # hp.write_map(appendToFilename(kappaMapFilename, "1e18"), curkapmap)
-
-    # divide by 1e3
-    # _unlensedMap = hp.read_map(mapFilename) / 1e3
-    # _unlensedAlm = hp.map2alm(_unlensedMap)
-    # print "writing alm and map 1e18"
-    # hp.write_alm(appendToFilename(mapFilename, 'd_1e3_alm'), _unlensedAlm)
-    # hp.write_map(appendToFilename(mapFilename, "d_1e3"), _unlensedMap)
+    # printNanAmount(unlensedAlm, 'unlensed alm d1e3')
     
     # #for kappa map -> phi alm
     # print "read kappa"
     # kappaMap = hp.read_map(kappaMapFilename)
-    # diagnoseMap(unlensedMap, 'kappa')
+    # printNanAmount(unlensedMap, 'kappa')
     # kappaAlm = hp.map2alm(kappaMap)
     # # kap2phi(zeroMap, kappaMap, unlensedPrimary, phiAlmFilename)
     # lmax = hp.Alm.getlmax(kappaAlm.shape[0])
@@ -146,24 +116,15 @@ while i<n:
     # print "----Done."
 
     # phiMap = hp.read_map(phiMapFilename)
-    # diagnoseMap(phiMap, 'phi')
+    # printNanAmount(phiMap, 'phi')
     
     print 'read lensed'
     lensedMap = hp.read_map(lensedMapFilename)
-    diagnoseMap(lensedMap, "%.1f<z<%.1f" % (zMinCib, zMaxCib))
+    printNanAmount(lensedMap, "%.1f<z<%.1f" % (zMinCib, zMaxCib))
     lensedUnseen = np.copy(lensedMap)
     lensedUnseen[np.isnan(lensedUnseen)] = hp.UNSEEN
-    # diagnoseMap(lensedMap, 'lensed d_1e3')
+    # printNanAmount(lensedMap, 'lensed d_1e3')
     lensedNanToZero = np.nan_to_num(lensedMap)
-    # hp.mollview(lensedMap, title="divided by 1e3", xsize=2048, cmap=cibCmap)
-
-    # lensedMapB = hp.read_map(lensedMapFilename)
-    # hp.mollview(lensedMapB, title="OG", xsize=2048, cmap=cibCmap)
-    # diagnoseMap(lensedMapB, 'lensed')
-
-    # lensedMapC = hp.read_map(appendToFilename(lensedMapFilename, '1e18'))
-    # hp.mollview(lensedMapC, title="multiplied by 1e18", xsize=2048, cmap=cibCmap)
-    # diagnoseMap(lensedMapC, 'lensed 1e18')
 
     # if os.path.exists(lensedSmoothedFilename):
     #     lensedMap = hp.read_map(lensedSmoothedFilename)
@@ -171,14 +132,10 @@ while i<n:
     #     lensedMap = hp.smoothing(lensedMap, fwhm=_fwhm)
     #     hp.write_map(lensedSmoothedFilename, lensedMap)
     
-    # diffMap = lensedMapNaN - unlensedMapRaw
     diffMap = lensedMap - unlensedMap
     diffUnseen = np.copy(diffMap)
     diffUnseen[np.isnan(diffMap)] = hp.UNSEEN
     diffNanToZero = np.nan_to_num(diffMap)
-    # print "num of nans (diff map):", diffMap[np.isnan(diffMap)].shape[0]
-    # diffMap = np.nan_to_num(diffMap)
-    # diffMap = hp.smoothing(diffMap, fwhm=_fwhm)
 
     # maxTemp = unlensedMap.max() / divisor
     # minTemp = unlensedMap.min() / divisor   
@@ -211,48 +168,28 @@ while i<n:
     #     phiMap = hp.alm2map(phiAlm, 2048)
     #     hp.write_map(phiMapFilename, phiMap)
     
-    # if os.path.exists(oldPhiMapFile):
-    #     print "read old phi map"
-    #     oldPhiMap = hp.read_map(oldPhiMapFile)
-    # else:
-    #     print "read old phi alm"
-    #     oldPhiAlm = hp.read_alm(oldPhiFile)
-    #     oldPhiMap = hp.alm2map(oldPhiAlm, 2048)
-    #     hp.write_map(oldPhiMapFile, oldPhiMap)
-   
-
     # diffScheme = colors.SymLogNorm(linthresh=9.e-5, linscale=0.03, vmin=-diffMax, vmax=diffMax)
-    # # normScheme = colors.SymLogNorm(linthresh=1.5e-8, linscale=1., vmin=minTemp, vmax=maxTemp)
-    # hp.mollview(phiMap, xsize=2000, cmap=lensingCmap, title="Phi @ 0.00<zmax<%.2f" % zMax, rot=rotAngle)
-    # phiMin = min(phiMap.min(), oldPhiMap.min())
-    # phiMax = max(phiMap.max(), oldPhiMap.max())
+    # normScheme = colors.SymLogNorm(linthresh=1.5e-8, linscale=1., vmin=minTemp, vmax=maxTemp)
     
     print 'plot unlensed'
     hp.mollzoom(unlensedMap, xsize=2048, cmap=cibCmap, title="Unlensed @ %.2f<zmax<%.2f smoothed fwhm=0.0035" % (zMinCib,zMaxCib), min=unlensedMin, max=unlensedMax, rot=rotAngle)#, norm=normScheme)
-    # hp.set_g_clim(minTemp, maxTemp)
+    # hp.set_g_clim(minTemp, maxTemp) #sets min/max of zoomed portion
     hp.set_g_clim(unlensedMin, unlensedMax)
-    # plt.savefig('/scratch2/r/rbond/phamloui/pics/jul17_unlensed_fwhm_0.0035/unlensed_zmin%.1f_zmax%.1f.png' % (zMinCib, zMaxCib), dpi=220)
-    # plt.clf()
+    # plt.savefig('/scratch2/r/rbond/phamloui/pics/jul17_unlensed_fwhm_0.0035/unlensed_zmin%.1f_zmax%.1f.png' % (zMinCib, zMaxCib), dpi=220) 
     print 'plot lensed'
     hp.mollzoom(lensedUnseen, xsize=2048, cmap=cibCmap, title="Unlensed @ %.2f<zmax<%.2f" % (zMinCib,zMaxCib), min=lensedMin, max=lensedMax, rot=rotAngle)#, norm=normScheme)
     # hp.set_g_clim(minTemp, maxTemp)
     hp.set_g_clim(lensedMin, lensedMax)
     # plt.savefig('/scratch2/r/rbond/phamloui/pics/jul17_lensed_fwhm_0.0035/lensed_zmin%.1f_zmax%.1f.png' % (zMinCib, zMaxCib), dpi=220)
-    # plt.clf()
     # print 'plot diff'
     # hp.mollzoom(diffUnseen, xsize=2048, cmap=diffCmap, title="Diff @ %.2f<zmax<%.2f" % (zMinCib,zMaxCib), min=-diffMax, max=diffMax)#, norm=diffScheme)
     # hp.set_g_clim(-diffMax, diffMax)
     # plt.savefig('/scratch2/r/rbond/phamloui/pics/jul17_diff_fwhm_0.0035/diff_zmin%.1f_zmax%.1f.png' % (zMinCib, zMaxCib), dpi=220)
-    # plt.clf()
-    
     # print 'plot kappa'
     # hp.mollzoom(kappaMap, xsize=2048, cmap=lensingCmap, title="Kappa @ 0.20<zmax<%.2f" % zMax)
     # print 'plot phi'
     # hp.mollview(phiMap, xsize=2048, cmap=lensingCmap, title="Phi @ 0.20<zmax<%.2f" % zMax, min=phiMin, max=phiMax)
     # hp.set_g_clim(phiMin, phiMax)
-    # hp.mollview(oldPhiMap, xsize=2048, cmap=lensingCmap, title="OLD Phi @ 0.00<zmax<%.2f" % zMax, min=phiMin, max=phiMax)
-    # hp.set_g_clim(phiMin, phiMax)
-    
 
     i += 1
     plt.show()

@@ -1,3 +1,5 @@
+# takes saved plot images and creates gif
+#NOTE: on scinet, need to use python 2.7.8 for this script to work -- tobytes function doesn't exist in python 2.7.5 (numpy 1.7)
 import numpy as np
 import healpy as hp
 import matplotlib.pyplot as plt
@@ -6,8 +8,6 @@ import matplotlib.colors as colors
 import colormaps as cmaps
 import os.path
 import imageio
-
-#NOTE: on scinet, need to use python 2.7.8 for this script to work -- tobytes function doesn't exist in python 2.7.5 (numpy 1.7)
 
 zInit=0.0
 zFinal=4.6

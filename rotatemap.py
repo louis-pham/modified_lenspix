@@ -1,3 +1,4 @@
+# rotate map using code from george -- used to debug cib lensing; meant to break correlation between primary and kappa
 import numpy as np
 import healpy as hp
 import matplotlib.pyplot as plt

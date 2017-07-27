@@ -1,3 +1,4 @@
+# loops over all cib maps and downgrades them to desired nside
 import numpy as np
 import healpy as hp
 # from kappa2phi import kap2phi                                                                       
@@ -18,8 +19,8 @@ while i<n:
     zMinCib = (i+1)*dz
     zMaxCib = (i+2)*dz
 
-    #primary map                                                                                                        
-    mapFilename = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_unlensed/cib_fullsky_ns4096_zmin%.2f_zmax%.2f_nu217_ns4096_tot.fits" % (zMinCib, zMaxCib)                                                                                                      
+    #primary map                                                                                               
+    mapFilename = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_unlensed/cib_fullsky_ns4096_zmin%.2f_zmax%.2f_nu217_ns4096_tot.fits" % (zMinCib, zMaxCib)                                                                       
     downgradeFile = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_unlensed/cib_fullsky_ns2048_zmin%.2f_zmax%.2f_nu217_ns2048_tot.fits" % (zMinCib, zMaxCib)
     print downgradeFile
     curmap = hp.read_map(mapFilename, verbose=False)

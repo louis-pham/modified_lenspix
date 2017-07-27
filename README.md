@@ -1,6 +1,7 @@
 # modified_lenspix
 ---very much a WIP---
-original code found at: http://cosmologist.info/lenspix/
+
+The original code for Lenspix can be found at: http://cosmologist.info/lenspix/.
 
 ## What does it do?
   Running lens.py will take the kappa (convergence) map and convert it to phi (gravitational potential) to be used as a lensing map. It will then read the nside and lmax of the primary map to be used in the lensing step. The script will then generate a "specific_params.ini" (created from the "generic_params.ini") based on the inputs provided. Lensing is simulated, and the lensed map is written to the provided filename. This will also yield a gradient phi map, and an unlensed and lensed power spectrum.
@@ -8,6 +9,9 @@ original code found at: http://cosmologist.info/lenspix/
 Much, if not all of the following assumes being used in a SciNet environment.
 
 ## Usage
+
+Follow the instructions on the original Lenspix website (link above) to actually make the simlens program, as that is what is used to actually do the lensing simulations. Afterwards you should be able to run __lens.py__ properly.
+
 ### Required files:
 1. Unlensed TQU alm/map FITS file
 2. Kappa map (combination of halo and field)
@@ -30,7 +34,7 @@ There are several helper scripts included. The main ones would be:
 
 __kappa2phi.py__ is the script that does the conversion of the kappa map to phi alm.
 
-__analytic_sim_compare.py__ is a script that allows one to compare the simulated lensed result with the analytical lensed calculations based on CAMB. To use, provide the following in the script:
+__analytic_sim_compare.py__ is a script that allows one to compare the simulated lensed result with the analytical lensed calculations based on CAMB. To use, make sure you have pyCamb installed, and then provide the following in the script:
 * primary alm filename
 * phi alm filename
 * lensed map filename

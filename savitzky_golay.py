@@ -1,3 +1,5 @@
+# taken from SO -- https://stackoverflow.com/questions/20618804/how-to-smooth-a-curve-in-the-right-way
+
 def savitzky_golay(y, window_size, order, deriv=0, rate=1):
     r"""Smooth (and optionally differentiate) data with a Savitzky-Golay filter.
     The Savitzky-Golay filter removes high frequency noise from data.

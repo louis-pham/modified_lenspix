@@ -5,7 +5,7 @@ import matplotlib.colors as colors
 from matplotlib import cm
 from astropy.io import fits
 import os
-from savitzky_golay import *
+from pycamb_scripts.savitzky_golay import savitzky_golay
 
 zInit=0.0
 zFinal=4.6

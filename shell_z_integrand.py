@@ -5,7 +5,6 @@ import matplotlib.colors as colors
 from matplotlib import cm
 from astropy.io import fits
 import os
-from savitzky_golay import *
 from scipy import interpolate
 
 zInit=0.0

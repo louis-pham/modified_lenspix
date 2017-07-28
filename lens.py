@@ -36,9 +36,9 @@ parser.add_argument('-ol', '--output_lmax', help='new lmax for the lensed map')
 parser.add_argument('-np', '--num_processes', help='-np from job submission')
 args = parser.parse_args()
 
-genericParams = 'generic_params.ini'
+genericParams = 'bin/generic_params.ini'
 specificParams = '/scratch2/r/rbond/phamloui/lenspix_files/output/specific_params.ini' #cant save to home directory when running this script as a job
-outFileRoot = "/scratch2/r/rbond/phamloui/lenspix_files/output/jun1_julian_cmb" #used mainly for power spectra files - in the future just append _power to filenames from arguments?
+outFileRoot = "/scratch2/r/rbond/phamloui/lenspix_files/output/lenspix_output" #used mainly for power spectra files - in the future just append _power to filenames from arguments?
 
 if args.num_processes:
     numProc = args.num_processes
@@ -128,6 +128,6 @@ subprocess.call(['sed', '-i', 's,__LENSEDFILEREPLACE__,' + lensedFile + ',g', sp
 print 'Params file created.'
 
 print 'Running simlens...'
-print 'Running "mpirun -np %s ./simlens %s"' % (numProc, specificParams)
-subprocess.call(['mpirun', '-np', str(numProc), './simlens', specificParams])
+print 'Running "mpirun -np %s ./bin/simlens %s"' % (numProc, specificParams)
+subprocess.call(['mpirun', '-np', str(numProc), './bin/simlens', specificParams])
 print 'Simlens complete.'

@@ -14,11 +14,19 @@ Follow the instructions on the original Lenspix website (link above) to actually
 
 This is the list of modules I had loaded for compiling to work:
 
-  1) use.experimental           6) intel/15.0.2              11) gnu-parallel/20140622
-  2) openmpi/intel/1.6.4        7) python/2.7.5              12) use.own
-  3) gsl/1.15-intel             8) hdf5/187-v18-serial-gcc   13) sigurdkn
-  4) gcc/4.6.1                  9) fftw/3.3.3-intel-openmpi
-  5) gnuplot/4.6.1             10) ffmpeg/2.1.3
+  1) use.experimental
+  2) openmpi/intel/1.6.4
+  3) gsl/1.15-intel
+  4) gcc/4.6.1
+  5) gnuplot/4.6.1
+  6) intel/15.0.2
+  7) python/2.7.5
+  8) hdf5/187-v18-serial-gcc
+  9) fftw/3.3.3-intel-openmpi
+  10) ffmpeg/2.1.3
+  11) gnu-parallel/20140622
+  12) use.own
+  13) sigurdkn
 
 For the last module ("sigurdkn") I've included the module file in this repository. To use this, copy this file into your "privatemodules" folder located in your home space, then run the command "module load use.own sigurdkn". Note that once the compilation is successful, you may encounter some conflicts when running the other scripts with this module loaded, so it is recommended to unload it after compiling successfully.
 

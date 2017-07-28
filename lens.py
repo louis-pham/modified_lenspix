@@ -37,8 +37,8 @@ parser.add_argument('-np', '--num_processes', help='-np from job submission')
 args = parser.parse_args()
 
 genericParams = 'bin/generic_params.ini'
-specificParams = '/scratch2/r/rbond/phamloui/lenspix_files/output/specific_params.ini' #cant save to home directory when running this script as a job
-outFileRoot = "/scratch2/r/rbond/phamloui/lenspix_files/output/lenspix_output" #used mainly for power spectra files - in the future just append _power to filenames from arguments?
+specificParams = 'bin/specific_params.ini' #NOTE: cant save to home directory when running this script as a job
+outFileRoot = "lensing_output_root" #used mainly for power spectra files - in the future just append _power to filenames from arguments?
 
 if args.num_processes:
     numProc = args.num_processes
@@ -61,7 +61,7 @@ nside = hdulist[1].header['NSIDE']
 hdulist.close()
 
 #no halo map yet, use zero map for now
-zeroMapFile = "/scratch2/r/rbond/phamloui/lenspix_files/zeros_%s.fits" % (nside)
+zeroMapFile = "test_maps/zeros_%s.fits" % (nside)
 haloKappaFile = zeroMapFile
 
 if not os.path.exists(zeroMapFile):

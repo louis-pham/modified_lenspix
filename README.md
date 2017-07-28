@@ -35,6 +35,8 @@ For the last module ("sigurdkn") I've included the module file in this repositor
 
 Run "__python lens.py <kappa_map_in> <primary_in> <phi_alm_out> <lensed_map_out> -np <no. of processes>__", where __<kappa_map_in>__ is the filename of the kappa map you want to lens with, __<primary_in>__ is the filename of the primary alm you want lensed, __<phi_alm_out>__ is the filename of the outputted phi alm, and __<lensed_map_out>__ is the filename for the lensed result. __<no. of processes>__ is the same as the __mpirun -np__ argument, since the code simply calls this command at the end. If -np is not provided it will default to 1. 
 
+Here is a test command using the included test maps: __python lens.py test_maps/kappa_map.fits test_maps/primary_alm.fits test_maps/phi_trial.fits test_maps/lensed_trial.fits -np 8__
+
 You will most likely need to change the specific_params.ini path in the lens.py script (the "specificParams" variable).
 
 An additional __make_maps.sh__ script has been added for batch lensing of multiple maps, which we used for CIB lensing simulations. If using this, make sure the __-np__ arguments agrees with the script's arguments (the comments at the beginning of the file). 

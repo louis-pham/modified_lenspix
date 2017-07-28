@@ -27,7 +27,7 @@ This is the list of modules I had loaded for compiling to work:
   12) use.own
   13) sigurdkn
 
-For the last module ("sigurdkn") I've included the module file in this repository. To use this, copy this file into your "privatemodules" folder located in your home space (original instructions [here](https://wiki.scinet.utoronto.ca/wiki/index.php/Installing_your_own_modules#How_to_do_it), then run the command "module load use.own sigurdkn". Note that once the compilation is successful, you may encounter some conflicts when running the other scripts with this module loaded, so it is recommended to unload it after compiling successfully.
+For the last module ("sigurdkn") I've included the module file in this repository. To use this, copy this file into your "privatemodules" folder located in your home space (original instructions [here](https://wiki.scinet.utoronto.ca/wiki/index.php/Installing_your_own_modules#How_to_do_it)), then run the command "module load use.own sigurdkn". Note that once the compilation is successful, you may encounter some conflicts when running the other scripts with this module loaded, so it is recommended to unload it after compiling successfully.
 
 ### Required files:
 1. Unlensed TQU alm/map FITS file

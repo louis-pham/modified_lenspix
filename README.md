@@ -1,7 +1,7 @@
 # modified_lenspix
 ---very much a WIP---
 
-The original code for Lenspix can be found at: http://cosmologist.info/lenspix/.
+The original code for Lenspix can be found [here](http://cosmologist.info/lenspix/).
 
 ## What does it do?
   Running lens.py will take the kappa (convergence) map and convert it to phi (gravitational potential) to be used as a lensing map. It will then read the nside and lmax of the primary map to be used in the lensing step. The script will then generate a "specific_params.ini" (created from the "generic_params.ini") based on the inputs provided. Lensing is simulated, and the lensed map is written to the provided filename. This will also yield a gradient phi map, and an unlensed and lensed power spectrum.
@@ -28,7 +28,7 @@ This is the list of modules I had loaded for compiling to work:
   12) use.own
   13) sigurdkn
 
-For the last module ("sigurdkn") I've included the module file in this repository. To use this, copy this file into your "privatemodules" folder located in your home space, then run the command "module load use.own sigurdkn". Note that once the compilation is successful, you may encounter some conflicts when running the other scripts with this module loaded, so it is recommended to unload it after compiling successfully.
+For the last module ("sigurdkn") I've included the module file in this repository. To use this, copy this file into your "privatemodules" folder located in your home space (original instructions [here](https://wiki.scinet.utoronto.ca/wiki/index.php/Installing_your_own_modules#How_to_do_it), then run the command "module load use.own sigurdkn". Note that once the compilation is successful, you may encounter some conflicts when running the other scripts with this module loaded, so it is recommended to unload it after compiling successfully.
 
 ### Required files:
 1. Unlensed TQU alm/map FITS file

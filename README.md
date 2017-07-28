@@ -9,8 +9,7 @@ The original code for Lenspix can be found [here](http://cosmologist.info/lenspi
 Much, if not all of the following assumes being used in a SciNet environment.
 
 ## Usage
-
-Follow the instructions on the original Lenspix website (link above) to actually make the simlens program, as that is what is used to actually do the lensing simulations. Afterwards you should be able to run __lens.py__ properly.
+To make the simlens program, simply go into the src/ folder and run the Makefile with the command "make". The "simlens" program should then be in the bin/ folder if all went well. Afterwards you should be able to run __lens.py__ properly.
 
 This is the list of modules I had loaded for compiling to work:
 

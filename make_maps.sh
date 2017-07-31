@@ -11,7 +11,7 @@ zi=0.0
 zf=4.6
 nz=22
 dz=0.2
-i=12
+i=1
 
 while [ $i -lt $nz ]; do
     echo $i

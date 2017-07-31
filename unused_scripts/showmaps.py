@@ -12,10 +12,13 @@ nside = 2048
 # lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib/lensed_cib_fullsky_ns2048_zmin2.00_zmax2.20_nu217_tot.fits" #map
 
 #new george maps
-kappa_map_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_kappa/8Gpc_n2048_nb18_nt16_kap_sis_2_ns2048_zmin0.0_zmax0.2_hp.fits"
-phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_kappa/8Gpc_n2048_nb18_nt16_phi_sis_2_ns2048_zmin0.0_zmax0.2_hp.fits"
-unlensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_unlensed/cib_fullsky_ns2048_zmin0.20_zmax0.40f_nu217_ns2048_tot_alm.fits" #alm
-lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/cib_v2_lensed/lensed_cib_fullsky_ns2048_zmin0.20_zmax0.40f_nu217_ns2048_tot.fits" #map
+kappa_map_file = "/scratch2/r/rbond/phamloui/lenspix_files/kappa_maps/cmb_kappa_halo_only_hp.fits"
+phi_alm_file = "/scratch2/r/rbond/phamloui/lenspix_files/kappa_maps/cmb_phi_halo_only_hp_alm.fits"
+unlensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/FromNERSC/ffp10_unlensed_scl_cmb_000_alm.fits" #alm
+lensed_file = "/scratch2/r/rbond/phamloui/lenspix_files/jul31_cmb_lensed_halo_only.fits" #map
+
+print kappa_map_file
+print phi_alm_file
 
 #kappa_map_file2 = "/scratch2/r/rbond/phamloui/lenspix_files/output/rotated_maps/8Gpc_n2048_nb23_nt18_kap_comb.fits"
 kappa_map = hp.read_map(kappa_map_file)

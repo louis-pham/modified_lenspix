@@ -27,7 +27,7 @@ This is the list of modules I had loaded for compiling to work:
   12) use.own
   13) sigurdkn
 
-For the last module ("sigurdkn") I've included the module file in this repository. To use this, copy this file into your "privatemodules" folder located in your home space (original instructions [here](https://wiki.scinet.utoronto.ca/wiki/index.php/Installing_your_own_modules#How_to_do_it)), then run the command "module load use.own sigurdkn". Note that once the compilation is successful, you may encounter some conflicts when running the other scripts with this module loaded, so it is recommended to unload it after compiling successfully.
+For the last module ("sigurdkn") I've included the module file in this repository. To use this, copy this file into your "privatemodules" folder located in your home space (more info on user modules [here](https://wiki.scinet.utoronto.ca/wiki/index.php/Installing_your_own_modules#How_to_do_it)), then run the command "module load use.own sigurdkn". Note that once the compilation is successful, you may encounter some conflicts when running the other scripts with this module loaded, so it is recommended to unload it after compiling successfully.
 
 ### Required files:
 1. Unlensed TQU alm/map FITS file
@@ -37,7 +37,7 @@ Run "__python lens.py <kappa_map_in> <primary_in> <phi_alm_out> <lensed_map_out>
 
 Here is a test command using the included test maps: __python lens.py test_maps/kappa_map.fits test_maps/primary_alm.fits test_maps/phi_trial.fits test_maps/lensed_trial.fits -np 8__
 
-You will most likely need to change the specific_params.ini path in the lens.py script (the "specificParams" variable).
+You may need to change the specific_params.ini path in the lens.py script (the "specificParams" variable) or any of the output file paths, such as when in a job environment and running the code from your home directory, since home becomes read-only.
 
 An additional __make_maps.sh__ script has been added for batch lensing of multiple maps, which we used for CIB lensing simulations. If using this, make sure the __-np__ arguments agrees with the script's arguments (the comments at the beginning of the file). 
 

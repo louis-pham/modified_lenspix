@@ -1,5 +1,5 @@
 Directory structure:
-'''
+```
 scratch2
 |---rbond
     |---phamloui
@@ -30,7 +30,7 @@ scratch2
 		    |	|---maps
 		    |---cib_lensed_kap0.2
 		    |   |---smoothed
-'''
+```
 # CMB
    Julian's primary: /scratch2/r/rbond/phamloui/lenspix_files/FromNERSC  
 

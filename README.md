@@ -80,3 +80,7 @@ __shellcls.py__ will plot the power spectra of the shells in one plot.
 ## Todos
 * different output lmax not yet implemented
 * plotgrad.py randomly selects indices to plot arrows, need to come up with a cleaner solution
+
+## Acknowledgements
+
+I thank Professor J. Richard Bond, Alex van Engelen, George Stein, and Marcelo Alvarez for guiding me throughout the development of this code and the entire project during my research period.

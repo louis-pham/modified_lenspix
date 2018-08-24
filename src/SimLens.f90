@@ -65,8 +65,8 @@
     lensed_map_file = Ini_Read_String('lensed_file')
 
     w8name = Ini_Read_String('w8dir')
-    interp_factor=0
-    if (lens_method == lens_interp) interp_factor = Ini_Read_Real('interp_factor',3.)
+    interp_factor=6
+    if (lens_method == lens_interp) interp_factor = Ini_Read_Real('interp_factor',6.)
 #ifdef MPIPIX
     mpi_division_method = Ini_Read_Int('mpi_division_method',division_balanced);
 #endif 
@@ -128,6 +128,7 @@
         call HealpixPower_Write(P,unlensed_cls_file)                                
         
         if (lens_method == lens_exact) then
+            write(*,*) "exact start"
             call HealpixExactLensedMap_GradPhi(H,A,GradPhi,M) !(H,A,GradPhi,M)
         else if (lens_method == lens_interp) then
            write(*,*) "interp start"

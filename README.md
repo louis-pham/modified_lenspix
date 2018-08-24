@@ -13,6 +13,10 @@ To make the simlens program, simply go into the src/ folder and run the Makefile
 
 This is the list of modules I had loaded for compiling to work:
 
+On Niagara
+  3) intel/2018.2       5) cfitsio/3.430
+  2) python/2.7.14-anaconda5.1.0       4) openmpi/3.1.0rc3
+
   1) use.experimental
   2) openmpi/intel/1.6.4
   3) gsl/1.15-intel

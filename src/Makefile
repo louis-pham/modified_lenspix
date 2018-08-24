@@ -4,17 +4,17 @@ F90C     = mpif90
 #F90C    = ifort
 
 healpix = $(HEALPIX)
-LAPACKL = -mkl=sequential -lmpi -lhealpix -openmp
+LAPACKL = -mkl=sequential -lmpi -lhealpix -qopenmp
 
 #remove -xHost if cluster is not homogeneous
 #add -DHEALPIXI4B if using older healpix and get errors about arguments not matching
 FFLAGS = -O3 -xHost -ip -fpp -error-limit 500 -DMPIPIX -DMPI -heap-arrays
 
 #cfitsio = /usr/local/Cluster-Apps/cfitsio/intel/3.300
-cfitsio ?= $(CFITSIO)
+cfitsio = /home/p/pen/malvarez/cfitsio
 
 
-F90FLAGS = $(FFLAGS) -I$(INCLUDE) -I$(healpix)/include -L$(cfitsio)/lib -L$(healpix)/lib $(LAPACKL) -lcfitsio
+F90FLAGS = $(FFLAGS) -I$(healpix) -I$(healpix)/include -L$(cfitsio)/lib -L$(healpix)/lib $(LAPACKL) -lcfitsio
 
 OBJFILES= toms760.o inifile.o utils.o spin_alm_tools.o \
    HealpixObj.o HealpixVis.o

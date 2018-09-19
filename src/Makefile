@@ -11,7 +11,7 @@ LAPACKL = -mkl=sequential -lmpi -lhealpix -qopenmp
 FFLAGS = -O3 -xHost -ip -fpp -error-limit 500 -DMPIPIX -DMPI -heap-arrays
 
 #cfitsio = /usr/local/Cluster-Apps/cfitsio/intel/3.300
-cfitsio = /home/p/pen/malvarez/cfitsio
+#cfitsio = /home/p/pen/malvarez/cfitsio
 
 
 F90FLAGS = $(FFLAGS) -I$(healpix) -I$(healpix)/include -L$(cfitsio)/lib -L$(healpix)/lib $(LAPACKL) -lcfitsio
